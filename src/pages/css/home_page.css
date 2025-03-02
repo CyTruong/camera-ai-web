@@ -1,7 +1,40 @@
 .home-container {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+}
+
+.row {
+  height: 100%;
+  width: 100%;
+}
+
+.custom-card {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  color: white;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+
+.col-4:first-child .camera-display-card {
+  height: 28%;
+}
+
+.col-4:nth-child(2) .camera-display-card{
+  height: 28%;
+}
+
+.col-4:last-child .camera-display-card:first-child {
+  height: 28%;
+}
+
+.col-4:last-child .custom-card.double-height {
+  height: 55%;
 }
