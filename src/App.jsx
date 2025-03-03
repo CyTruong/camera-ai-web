@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Homepage from './pages/Home';
 import Login from './pages/Login';
+import Motor from './pages/Motor'; 
 import { AuthLoginInfo } from './AuthComponents/AuthLogin';
 import PrivateRoute from './AuthComponents/PrivateRoute';
 import LoginRoute from './AuthComponents/LoginRoute';
@@ -13,11 +14,13 @@ function App() {
   const location = useLocation();
   console.log("location", location);
   const hideNavBar = location.pathname.includes('/camera-popup') || location.pathname.includes('/login');
+  const isPin = location.pathname.includes('/xe-2-banh');
 
-  console.log(ctx);
+  console.log("hideNavBar", hideNavBar);
+  console.log("isPin", isPin);
   return (
     <>
-      {!hideNavBar && <NavigationBar />}
+      {!hideNavBar && <NavigationBar isPin={isPin} />}
       <div className={hideNavBar ? '' : 'content'}>
         <Routes>
           <Route
@@ -26,6 +29,15 @@ function App() {
             element={
               <PrivateRoute>
                 <Homepage />
+              </PrivateRoute>
+            }
+          />
+          <Route 
+            path="/xe-2-banh"
+            exact
+            element={
+              <PrivateRoute>
+                <Motor />
               </PrivateRoute>
             }
           />

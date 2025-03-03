@@ -9,24 +9,25 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/NavigationBar.css';
 
-const NavigationBar = () => {
-  const [showNavBar, setShowNavBar] = useState(false);
+const NavigationBar = ({ isPin }) => {
+  const [showNavBar, setShowNavBar] = useState(isPin);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleMouseMove = (event) => {
-      if (event.clientX <= 300) {
-        setShowNavBar(true);
-      } else {
-        setShowNavBar(false);
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
+    if (!isPin) {
+      const handleMouseMove = (event) => {
+        if (event.clientX <= 300) {
+          setShowNavBar(true);
+        } else {
+          setShowNavBar(false);
+        }
+      };
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+      };
+    }
+  }, [isPin]);
 
   const handleLogout = () => {
     localStorage.clear();
