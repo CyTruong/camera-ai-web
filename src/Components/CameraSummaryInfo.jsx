@@ -6,6 +6,16 @@ const CameraSummaryInfo = ({ totalCars, carsInParking, carsEntering, carsExiting
   const currentDate = new Date().toLocaleDateString();
   const currentTime = new Date().toLocaleTimeString();
 
+const handleExportExcel = () => {
+    const cameraName = 'camera1';
+    console.log('Navigating to CameraPopup page...');
+    window.open(
+      `/camera-popup/${cameraName}`,
+      '_blank',
+      'width=500,height=400,top=100,left=100'
+    );
+}
+
   return (
     <div className="camera-summary-info container-fluid">
       <div className="row mb-3">
@@ -40,25 +50,25 @@ const CameraSummaryInfo = ({ totalCars, carsInParking, carsEntering, carsExiting
       </div>
       <div className="row">
         <div className="col-4 text-center">
-          <button type="button" className="btn btn-primary mb-2">Xuất Excel</button>
-        </div>
-        {/* <div className="col-4 text-center">
-          <button type="button" className="btn btn-secondary mb-2">Nút 2</button>
+          <button type="button" className="btn btn-primary mb-2" onClick={handleExportExcel}>Xuất Excel</button>
         </div>
         <div className="col-4 text-center">
-          <button type="button" className="btn btn-success mb-2">Nút 3</button>
-        </div> */}
+          <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 2</button>
+        </div>
+        <div className="col-4 text-center">
+          <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 3</button>
+        </div>
       </div>
       <div className="row">
-        {/* <div className="col-4 text-center">
-          <button type="button" className="btn btn-danger mb-2">Nút 4</button>
+        <div className="col-4 text-center">
+         <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 4</button>
         </div>
         <div className="col-4 text-center">
-          <button type="button" className="btn btn-warning mb-2">Nút 5</button>
+         <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 5</button>
         </div>
         <div className="col-4 text-center">
-          <button type="button" className="btn btn-info mb-2">Nút 6</button>
-        </div> */}
+         <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 6</button>
+        </div>
       </div>
     </div>
   );

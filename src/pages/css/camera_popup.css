@@ -1,0 +1,15 @@
+.camera-popup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.camera-name {
+  font-size: 1.3em;
+  text-align: left;
+}
+
+.license-plate {
+  font-size: 2em;
+  text-align: left;
+}
