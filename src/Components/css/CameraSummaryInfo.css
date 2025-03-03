@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: black; /* Change text color to black */
+  color: rgb(0, 0, 0); /* Change text color to black */
 }
 
 .camera-summary-info h1 {

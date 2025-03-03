@@ -6,20 +6,21 @@ import './css/login_page.css';
 import logo from '../assets/logo.svg';
 
 const Login = () => {
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const login = (e) => {
     e.preventDefault();
     axios.post("http://171.244.16.229:8092/api/users/sign_in", {
-      username: userName,
+      username: username,
       password: password
     }).then(function(response) {
       console.log('Login response access token', response.data.accessToken);
       localStorage.setItem('token', response.data.accessToken);
       navigate('/');
+      window.location.reload();
     }).catch(function(err) {
       console.log('Login failed');
       setError('Wrong username or password');
@@ -27,39 +28,30 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4">
-        <div className="text-center mb-4">
-          <img src={logo} alt="App Logo" className="logo-img" />
+    <div className="bodyWrap" style={{ left: '145px' }}>
+    <div className="contentLoginWrap">
+      <div className="loginSide">
+        <div className="loginWrap">
+          <h1>Log in</h1>
+          <div className="input-group">
+            <input type="text" className="input" onChange={e => setUsername(e.target.value)} required="required"/>
+            <label className={`${username.length > 0 ? "focusLabel" : ""}`}>Login</label>
+          </div>
+          <div className="input-group">
+            <input type="text" className="input password" onChange={e => setPassword(e.target.value)} required="required"/>
+            <label className={`${password.length > 0 ? "focusLabel" : ""}`}>Password</label>
+          </div>
+          <button onClick={login}>Login</button>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="userName">Username</label>
-            <input
-              type="text"
-              className="form-control"
-              id="userName"
-              placeholder="Enter username"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          {error && <div className="alert alert-danger mt-3">{error}</div>}
-          <button type="submit" className="btn btn-primary btn-block mt-3">Login</button>
-        </form>
+      </div>
+      <div className="infoSide">
+        <div className="loginWrap">
+          <h2>Hello again!</h2>
+          <p>Log in to your account to get access to app.</p>
+        </div>
       </div>
     </div>
+  </div>
   );
 };
 

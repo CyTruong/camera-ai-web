@@ -1,40 +1,33 @@
 .home-container {
   width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f5f5f5; /* Light background color */
 }
 
-.row {
-  height: 100%;
-  width: 100%;
+/* Styled Card */
+.styled-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #ffffff; /* White background for cards */
+  width: 100% !important; /* Make the card take full width of its container */
+  max-width: 95% !important; /* Set a maximum width for the card */
 }
 
-.custom-card {
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.styled-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Double-height card */
+.styled-card.double-height {
+  height: 65%;
+  background-color: #d3d3d3; /* Dark background for summary card */
   color: white;
-  border-radius: 0.25rem;
-  padding: 1rem;
 }
 
-.col-4:first-child .camera-display-card {
+/* Custom card heights */
+.col-md-4 .camera-display-card {
   height: 28%;
-}
-
-.col-4:nth-child(2) .camera-display-card{
-  height: 28%;
-}
-
-.col-4:last-child .camera-display-card:first-child {
-  height: 28%;
-}
-
-.col-4:last-child .custom-card.double-height {
-  height: 55%;
 }

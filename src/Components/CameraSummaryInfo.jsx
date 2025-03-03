@@ -50,24 +50,24 @@ const handleExportExcel = () => {
       </div>
       <div className="row">
         <div className="col-4 text-center">
-          <button type="button" className="btn btn-primary mb-2" onClick={handleExportExcel}>Xuất Excel</button>
+          <button type="button" style={{ height: '90%', width: '100%' }} className="btn btn-primary mb-2" onClick={handleExportExcel}>Xuất Excel</button>
         </div>
         <div className="col-4 text-center">
-          <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 2</button>
+          <button type="button" style={{ height: '90%', width: '100%' }}  className="btn btn-secondary mb-2" disabled>Chức năng 2</button>
         </div>
         <div className="col-4 text-center">
-          <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 3</button>
+          <button type="button" style={{ height: '90%', width: '100%' }}  className="btn btn-secondary mb-2" disabled>Chức năng 3</button>
         </div>
       </div>
       <div className="row">
         <div className="col-4 text-center">
-         <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 4</button>
+         <button type="button" style={{ height: '90%', width: '100%' }}  className="btn btn-secondary mb-2" disabled>Chức năng 4</button>
         </div>
         <div className="col-4 text-center">
-         <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 5</button>
+         <button type="button" style={{ height: '90%', width: '100%' }}  className="btn btn-secondary mb-2" disabled>Chức năng 5</button>
         </div>
         <div className="col-4 text-center">
-         <button type="button" className="btn btn-secondary mb-2" disabled>Chức năng 6</button>
+         <button type="button" style={{ height: '90%' , width: '100%'}}  className="btn btn-secondary mb-2" disabled>Chức năng 6</button>
         </div>
       </div>
     </div>
