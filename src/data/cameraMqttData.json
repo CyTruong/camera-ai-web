@@ -1,49 +1,49 @@
 [
   {
-    "name": "Camera1",
-    "url": "mqtt://103.116.8.51",
+    "name": "Camera_1",
+    "url": "103.116.8.51",
     "port": 9001,
-    "topic": "camera/1",
-    "displayName": "Camera người vào"
-  },
-  {
-    "name": "Camera2",
-    "url": "mqtt://103.116.8.51",
-    "port": 9001,
-    "topic": "camera/2",
+    "topic": "cameraai/GPG",
     "displayName": "Camera xe vào"
   },
   {
-    "name": "Camera3",
-    "url": "mqtt://103.116.8.51",
+    "name": "camera2",
+    "url": "103.116.8.51",
+    "port": 9001,
+    "topic": "camera/2",
+    "displayName": "Camera người vào"
+  },
+  {
+    "name": "camera3",
+    "url": "103.116.8.51",
     "port": 9001,
     "topic": "camera/3",
     "displayName": "Camera container vào"
   },
   {
-    "name": "Camera4",
-    "url": "mqtt://103.116.8.51",
+    "name": "Camera_2",
+    "url": "103.116.8.51",
     "port": 9001,
-    "topic": "camera/4",
+    "topic": "cameraai/GPG",
     "displayName": "Camera người ra"
   },
   {
-    "name": "Camera5",
-    "url": "mqtt://103.116.8.51",
+    "name": "camera5",
+    "url": "103.116.8.51",
     "port": 9001,
     "topic": "camera/5",
     "displayName": "Camera container ra"
   },
   {
-    "name": "Camera6",
-    "url": "mqtt://103.116.8.51",
+    "name": "camera6",
+    "url": "103.116.8.51",
     "port": 9001,
     "topic": "camera/6",
     "displayName": "Camera container ra"
   },
   {
-    "name": "Camera7",
-    "url": "mqtt://103.116.8.51",
+    "name": "camera7",
+    "url": "103.116.8.51",
     "port": 9001,
     "topic": "camera/7",
     "displayName": "Camera tổng"

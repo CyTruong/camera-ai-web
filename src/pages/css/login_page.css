@@ -118,12 +118,12 @@ label.focusLabel {
 
 /* right side */
 .infoSide {
-  background: -webkit-linear-gradient(bottom left, #EF5F63, #CA3D47, #820014, #5F0000);
-  background: -o-linear-gradient(bottom left, #EF5F63, #CA3D47, #820014, #5F0000);
-  background: linear-gradient(to top right, #EF5F63, #CA3D47, #820014, #5F0000);
+  background: -webkit-linear-gradient(bottom left, #495057, #6c757d, #adb5bd, #dee2e6);
+  background: -o-linear-gradient(bottom left, #495057, #6c757d, #adb5bd, #dee2e6);
+  background: linear-gradient(to top right, #495057, #6c757d, #adb5bd, #dee2e6);
   background-size: 400% 400%;
   animation: gradient 12s ease infinite;
-  color: #fff;
+  color: #000000;
   border-radius: 50px;
   text-align: center;
   height: 100%;

@@ -15,7 +15,7 @@ const Home = () => {
   const [carsEntering, setCarsEntering] = useState(0);
   const [carsExiting, setCarsExiting] = useState(0);
   const [transactions, setTransactions] = useState([]);
-
+  
   const loadTransactionData = () => {
     const token = localStorage.getItem("token");
 
@@ -82,6 +82,17 @@ const Home = () => {
       try {
         const jsonData = JSON.parse(message.payloadString);
         if (jsonData.camera_name === "Camera 1" || jsonData.camera_name === "Camera 2") {
+          const cameraName = jsonData.camera_name.replace(" ", "_");
+          const cameraData = localStorage.getItem(`${cameraName}_init_val`);
+          if (!cameraData || cameraData.length === 0) {
+            localStorage.setItem(`${cameraName}_init_val`, JSON.stringify(jsonData));
+            console.log('Navigating to CameraPopup page...');
+            window.open(
+              `${window.location.origin}/camera-popup/${cameraName}`,
+              '_blank',
+              'width=600,height=540,top=100,left=100'
+            );
+          }
           setTimeout(() => {
             loadTransactionData();
           }, 500);
@@ -103,6 +114,7 @@ const Home = () => {
 
   return (
     <Container fluid className="home-container">
+      
       <Row className="g-4">
         {/* First Column */}
         <Col md={4}>

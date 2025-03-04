@@ -1,15 +1,36 @@
 .camera-popup {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5f5; /* Màu nền nhẹ */
+}
+
+.image-container {
+  width: 100%;
+  max-width: 800px; /* Giới hạn kích thước hình ảnh */
+  border: 2px solid #000; /* Viền đen bao quanh hình ảnh */
+  border-radius: 8px; /* Bo góc */
+  overflow: hidden; /* Đảm bảo hình ảnh không tràn ra ngoài */
 }
 
 .camera-name {
-  font-size: 1.3em;
-  text-align: left;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333; /* Màu chữ đen */
+  text-align: center;
+}
+
+.license-plate-container {
+  border: 2px solid #000; /* Viền đen bao quanh biển số */
+  padding: 10px 20px;
+  border-radius: 8px; /* Bo góc */
+  background-color: #fff; /* Nền trắng */
 }
 
 .license-plate {
-  font-size: 2em;
-  text-align: left;
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #ff0000; /* Màu chữ đỏ */
+  text-align: center;
 }

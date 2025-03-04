@@ -32,22 +32,22 @@ const Login = () => {
     <div className="contentLoginWrap">
       <div className="loginSide">
         <div className="loginWrap">
-          <h1>Log in</h1>
+          <h1>Đăng nhập</h1>
           <div className="input-group">
             <input type="text" className="input" onChange={e => setUsername(e.target.value)} required="required"/>
-            <label className={`${username.length > 0 ? "focusLabel" : ""}`}>Login</label>
+            <label className={`${username.length > 0 ? "focusLabel" : ""}`}>Tài khoản :</label>
           </div>
           <div className="input-group">
             <input type="text" className="input password" onChange={e => setPassword(e.target.value)} required="required"/>
-            <label className={`${password.length > 0 ? "focusLabel" : ""}`}>Password</label>
+            <label className={`${password.length > 0 ? "focusLabel" : ""}`}>Mật Khẩu :</label>
           </div>
-          <button onClick={login}>Login</button>
+          <button onClick={login}>Xác nhận</button>
         </div>
       </div>
       <div className="infoSide">
         <div className="loginWrap">
-          <h2>Hello again!</h2>
-          <p>Log in to your account to get access to app.</p>
+          <h2>Xin chào</h2>
+          <p>Vui lòng đăng nhập bằng tài khoản được cấp để truy cập vào trang web theo dõi Camera</p>
         </div>
       </div>
     </div>
