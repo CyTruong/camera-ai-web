@@ -19,6 +19,22 @@ function SearchBar({ data, handleSearchChange, dataType, status }) {
       });
     handleSearchChange(dataFiltered);
   };
+
+  const truckDataFiltered = () => {
+    const dataFiltered = data
+     ?.filter((val) => {
+       if (
+          ( searchInput.length === 0 && ( status === "" ||
+           (status ==="in" && !val.exitTime ) ||
+           (status ==="out" && val.exitTime)))  ||
+           (searchInput.length > 0 && (val.license_plate.toLowerCase().includes(searchInput.toLowerCase()) || val.id + "" === searchInput))
+       ) {
+         return val;
+       }
+     });
+   handleSearchChange(dataFiltered);
+ };
+
   const clientsDataFiltered = () => {
     const dataFiltered = data
       ?.filter((val) => {
@@ -112,6 +128,9 @@ function SearchBar({ data, handleSearchChange, dataType, status }) {
     }
     if(dataType === "moto") {
       motorDataFiltered();
+    }
+    if(dataType === "truck") {
+      truckDataFiltered();
     }
   }, [searchInput, status]);
 

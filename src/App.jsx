@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Homepage from './pages/Home';
 import Login from './pages/Login';
 import Motor from './pages/Motor'; 
+import Truck from './pages/Truck'
 import { AuthLoginInfo } from './AuthComponents/AuthLogin';
 import PrivateRoute from './AuthComponents/PrivateRoute';
 import LoginRoute from './AuthComponents/LoginRoute';
@@ -14,7 +15,7 @@ function App() {
   const location = useLocation();
   console.log("location", location);
   const hideNavBar = location.pathname.includes('/camera-popup') || location.pathname.includes('/login');
-  const isPin = location.pathname.includes('/xe-2-banh');
+  const isPin = location.pathname.includes('/moto') || location.pathname.includes('/truck');
 
   console.log("hideNavBar", hideNavBar);
   console.log("isPin", isPin);
@@ -33,11 +34,20 @@ function App() {
             }
           />
           <Route 
-            path="/xe-2-banh"
+            path="/moto"
             exact
             element={
               <PrivateRoute>
                 <Motor />
+              </PrivateRoute>
+            }
+          />
+          <Route 
+            path="/truck"
+            exact
+            element={
+              <PrivateRoute>
+                <Truck />
               </PrivateRoute>
             }
           />

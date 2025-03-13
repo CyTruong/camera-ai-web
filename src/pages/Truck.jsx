@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import "./css/motor_page.css";
+import "./css/truck_page.css";
 import Popup from "../Components/Popup";
-import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
 import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
 
-function Motor() {
+function Truck() {
   const [transactionData, setTransactionData] = useState([]);
   const [buttonShowPopup, setButtonShowPopup] = useState(false);
   const [selectedAd, setSelectedAd] = useState(0);
@@ -86,7 +85,7 @@ function Motor() {
           return {
         tracker_index: transaction._id,
         license_plate: licensePlate,
-        camera_name: 'MOTOR',
+        camera_name: 'TRUCK',
         cropUrl: crop_url,
         fullUrl: full_url,
         entryTime: transaction.entryTime,
@@ -110,7 +109,7 @@ function Motor() {
     <div className="bodyWrap">
       <div className="contentOrderWrap">
         <div className="leftSide">
-          <h1>Xe 2 bánh</h1>
+          <h1>Xe tải</h1>
           <Pagination
             total={totalAds}
             itemsPerPage={itemsPerPage}
@@ -236,4 +235,4 @@ function Motor() {
   );
 }
 
-export default Motor;
+export default Truck;

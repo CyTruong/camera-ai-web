@@ -114,7 +114,6 @@ const Home = () => {
 
   return (
     <Container fluid className="home-container">
-      
       <Row className="g-4">
         {/* First Column */}
         <Col md={4}>
@@ -178,6 +177,7 @@ const Home = () => {
           <Card className="styled-card double-height mt-4">
             <Card.Body>
               <CameraSummaryInfo
+                transactions={transactions}
                 totalCars={totalCars}
                 carsInParking={carsInParking}
                 carsEntering={carsEntering}

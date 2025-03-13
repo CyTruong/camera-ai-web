@@ -1,0 +1,25 @@
+:root {
+  --primary-color: #007bff; /* Primary color */
+  --secondary-color: #6c757d; /* Secondary color */
+  --success-color: #28a745; /* Success color */
+  --danger-color: #dc3545; /* Danger color */
+  --warning-color: #ffc107; /* Warning color */
+  --info-color: #17a2b8; /* Info color */
+  --light-color: #f8f9fa; /* Light color */
+  --dark-color: #343a40; /* Dark color */
+
+  /* Additional custom colors */
+  --custom-color-1: #ff5733;
+  --custom-color-2: #33ff57;
+  --custom-color-3: #3357ff;
+
+  /* Font sizes */
+  --font-size-small: 0.875rem;
+  --font-size-medium: 1rem;
+  --font-size-large: 1.25rem;
+
+  /* Spacing */
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+}

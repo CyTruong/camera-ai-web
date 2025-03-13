@@ -23,7 +23,7 @@
 /* Double-height card */
 .styled-card.double-height {
   height: 65%;
-  background-color: #d3d3d3; /* Dark background for summary card */
+  background-color: #faf9f9; /* Dark background for summary card */
   color: white;
 }
 

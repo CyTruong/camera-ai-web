@@ -69,13 +69,13 @@ const NavigationBar = ({ isPin }) => {
             </ListItemIcon>
             <ListItemText primary="Trang chủ" />
           </ListItem>
-          <ListItem button component={Link} to="/oto" className="nav-link">
+          <ListItem button component={Link} to="/truck" className="nav-link">
             <ListItemIcon>
               <DirectionsCarIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Xe 4 bánh" />
+            <ListItemText primary="Xe công/ xe tải" />
           </ListItem>
-          <ListItem button component={Link} to="/xe-2-banh" className="nav-link">
+          <ListItem button component={Link} to="/moto" className="nav-link">
             <ListItemIcon>
               <TwoWheelerIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
