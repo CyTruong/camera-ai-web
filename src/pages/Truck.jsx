@@ -28,8 +28,8 @@ function Truck() {
     (currentPage - 1) * itemsPerPage + itemsPerPage
   );
 
-  function convertEpochToDateTime(epochTime) {
-    const date = new Date(epochTime * 1000); // Convert seconds to milliseconds
+  function convertEpochMsToDateTime(epochTimeMs) {
+    const date = new Date(epochTimeMs); // Convert milliseconds to Date object
     const options = {
       year: 'numeric',
       month: '2-digit',
@@ -41,7 +41,6 @@ function Truck() {
     };
     return date.toLocaleDateString('en-GB', options).replace(',', '');
   }
-
   function convertMiliSecondsToDistanceTime(milliseconds) {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const days = Math.floor(totalSeconds / (24 * 3600));
@@ -176,8 +175,8 @@ function Truck() {
                       <td>
                         <img src={ad.cropUrl} alt={ad.license_plate} style={{ width: "100px", height: "auto" }} />
                       </td>
-                      <td>{convertEpochToDateTime(ad.entryTime)}</td>
-                      <td>{ad.exitTime ? convertEpochToDateTime(ad.exitTime) : ""}</td>
+                      <td>{ad.entryTime ? convertEpochMsToDateTime(ad.entryTime) : ""}</td>
+                      <td>{ad.exitTime ? convertEpochMsToDateTime(ad.exitTime) : ""}</td>
                       <td>{ad.parkingTime ? convertMiliSecondsToDistanceTime(ad.parkingTime) : ""}</td>
                     </tr>
                   );

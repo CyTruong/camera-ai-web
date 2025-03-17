@@ -90,7 +90,7 @@ const Home = () => {
             window.open(
               `${window.location.origin}/camera-popup/${cameraName}`,
               '_blank',
-              'width=600,height=540,top=100,left=100'
+              'width=600,height=470,top=100,left=100'
             );
           }
           setTimeout(() => {
