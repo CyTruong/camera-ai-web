@@ -7,19 +7,7 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
   const currentDate = new Date().toLocaleDateString();
   const currentTime = new Date().toLocaleTimeString();
 
-  const header = {
-    tracker_index: 'Tracker Index',
-    license_plate: 'License Plate',
-    camera_name: 'Camera Name',
-    cropUrl: 'Crop URL',
-    fullUrl: 'Full URL',
-    entryTime: 'Entry Time',
-    exitTime: 'Exit Time',
-    parkingTime: 'Parking Time'
-  };
-
   const fileName = 'CameraSummary';
-  const sheetOptions = { skipHeader: false };
 
   return (
     <div className="camera-summary-info container-fluid">
@@ -54,7 +42,7 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
         </div>
       </div>
       <div className="col-4 text-center">
-        <ExcelExportButton data={transactions} header={header} fileName={fileName} sheetOptions={sheetOptions} />
+        <ExcelExportButton data={transactions}  filename={fileName} />
       </div>
     </div>
   );
