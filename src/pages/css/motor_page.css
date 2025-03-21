@@ -15,6 +15,8 @@
   -moz-box-shadow: 0px 0px 33px 0px rgba(219, 221, 255, 0.46);
   box-shadow: 0px 0px 33px 0px rgba(219, 225, 255, 0.46);
   padding: 20px;
+  padding-left: 200px !important;
+
   font-family: "Varela";
 }
 
@@ -486,4 +488,43 @@
   .addOrder {
     padding: 10px 25px;
   }
+}
+
+/* detail-modal */
+#detail-modal .modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  background-color: var(--background-paper, #fff);
+  box-shadow: 24px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#detail-modal .modal-content {
+  text-align: center;
+}
+
+#detail-modal .modal-images {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+#detail-modal .modal-images img {
+  height: auto;
+}
+
+#detail-modal .modal-images .crop-image {
+  width: 250px;
+}
+
+#detail-modal .modal-images .full-image {
+  width: 500px;
 }

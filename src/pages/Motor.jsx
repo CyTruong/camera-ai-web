@@ -1,35 +1,31 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "./css/motor_page.css";
-import Popup from "../Components/Popup";
-import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
 import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
+import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
+import { Modal, Box, Typography } from "@mui/material"; // Import Modal và Box từ MUI
 
 function Motor() {
   const [transactionData, setTransactionData] = useState([]);
-  const [buttonShowPopup, setButtonShowPopup] = useState(false);
-  const [selectedAd, setSelectedAd] = useState(0);
-  const [updatedStatus, setUpdatedStatus] = useState(true);
   const [filteredData, setFilteredData] = useState([]);
-
   const [filterActive, setFilterActive] = useState(1);
   const [filterTransaction, setFilterTransactions] = useState("");
-
-  const handleSearchChange = (newFilteredData) => {
-    console.log('newFilteredData', newFilteredData);
-    setFilteredData(newFilteredData);
-  };
-
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedAd, setSelectedAd] = useState(null); // Lưu thông tin dòng được chọn
+  const [openModal, setOpenModal] = useState(false); // State để điều khiển modal
+
   const itemsPerPage = 10;
-  const totalAds = filteredData.length;
-  const computedTransaction = filteredData.slice(
-    (currentPage - 1) * itemsPerPage,
-    (currentPage - 1) * itemsPerPage + itemsPerPage
-  );
 
+  function convertMiliSecondsToDistanceTime(milliseconds) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const days = Math.floor(totalSeconds / (24 * 3600));
+    const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const remainingSeconds = totalSeconds % 60;
 
+    return `${days}d ${hours}h ${minutes}m ${remainingSeconds}s`;
+  }
   function convertEpochMsToDateTime(epochTimeMs) {
     const date = new Date(epochTimeMs); // Convert milliseconds to Date object
     const options = {
@@ -43,36 +39,52 @@ function Motor() {
     };
     return date.toLocaleDateString('en-GB', options).replace(',', '');
   }
-  function convertMiliSecondsToDistanceTime(milliseconds) {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const days = Math.floor(totalSeconds / (24 * 3600));
-    const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const remainingSeconds = totalSeconds % 60;
-
-    return `${days}d ${hours}h ${minutes}m ${remainingSeconds}s`;
-  }
-
   function convertToUrl(imagePath) {
     if (!imagePath || typeof imagePath !== "string") {
       // Return a default URL or empty string if the input is invalid
       return "http://115.73.209.76:8092/placeholder.png";
     }
-    const baseUrl = "http://171.244.16.229:8070/";
+    const baseUrl = "http://171.244.16.229:8070";
     const filename = imagePath.split('/')[0];
     return `${baseUrl}/${filename}`; // Construct the new URL
   }
+  // Hàm mở modal và hiển thị thông tin chi tiết
+  const handleOpenModal = (ad) => {
+    setSelectedAd(ad);
+    setOpenModal(true);
+  };
 
+  // Hàm đóng modal
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleSearchChange = (newFilteredData) => {
+    console.log('newFilteredData', newFilteredData);
+    setFilteredData(newFilteredData);
+  };
+
+  // Hàm lọc dữ liệu
+  useEffect(() => {
+    let filtered = transactionData;
+    if (filterTransaction === "in") {
+      filtered = transactionData.filter(transaction => !transaction.exitTime);
+    } else if (filterTransaction === "out") {
+      filtered = transactionData.filter(transaction => transaction.exitTime);
+    }
+    setFilteredData(filtered);
+    setCurrentPage(1);
+  }, [filterTransaction, transactionData]);
+
+  // Hàm fetch dữ liệu từ API
   const loadTransactionData = () => {
-    const token = localStorage.getItem('token');  // Assuming the token is stored in localStorage
-    
+    const token = localStorage.getItem('token');
     axios.get("http://171.244.16.229:8092/api/transaction/", {
       headers: {
-        'Authorization': `Bearer ${token}`,  // Dynamically using the token
+        'Authorization': `Bearer ${token}`,
       }
     })
     .then(function(response) {
-      console.log('Load all trans response', response.data.data);
       const allTransaction = response.data.data;
       const formattedTransactions = allTransaction
         .filter(transaction => transaction.licensePlate.length < 15)
@@ -84,27 +96,33 @@ function Motor() {
           const licensePlate = String(transaction.licensePlate).replace(/[^a-zA-Z0-9]/g, '');
           
           return {
-        tracker_index: transaction._id,
-        license_plate: licensePlate,
-        camera_name: 'MOTOR',
-        cropUrl: crop_url,
-        fullUrl: full_url,
-        entryTime: transaction.entryTime,
-        exitTime: transaction.exitTime,
-        parkingTime: transaction.parkingTime
+            tracker_index: transaction._id,
+            license_plate: licensePlate,
+            camera_name: 'MOTOR',
+            cropUrl: crop_url,
+            fullUrl: full_url,
+            entryTime: transaction.entryTime,
+            exitTime: transaction.exitTime,
+            parkingTime: transaction.parkingTime
           };
         });
       setTransactionData(formattedTransactions);
       setFilteredData(formattedTransactions);
     })
     .catch(function(err) {
-      console.log('Login failed');
+      console.error('Error loading transaction data:', err);
     });
   };
 
   useEffect(() => {
     loadTransactionData();
   }, []);
+
+  const totalAds = filteredData.length;
+  const computedTransaction = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="bodyWrap">
@@ -167,71 +185,61 @@ function Motor() {
                   <th>Thời gian vào</th>
                   <th>Thời gian ra</th>
                   <th>Thời gian đỗ</th>
+                  <th>  </th>  
                 </tr>
               </thead>
               <tbody>
-                {computedTransaction.map((ad) => {
-                  return (
-                    <tr key={ad.tracker_index}>
-                      <td>{ad.license_plate}</td>
-                      <td>
-                        <img src={ad.cropUrl} alt={ad.license_plate} style={{ width: "100px", height: "auto" }} />
-                      </td>
-                      <td>{ad.entryTime? convertEpochMsToDateTime(ad.entryTime) : ""}</td>
-                      <td>{ad.exitTime ? convertEpochMsToDateTime(ad.exitTime) : ""}</td>
-                      <td>{ad.parkingTime ? convertMiliSecondsToDistanceTime(ad.parkingTime) : ""}</td>
-                    </tr>
-                  );
-                })}
+                {computedTransaction.map((ad) => (
+                  <tr key={ad.tracker_index}>
+                    <td>{ad.license_plate}</td>
+                    <td>
+                      <img src={ad.cropUrl} alt={ad.license_plate} className="crop-image" />
+                    </td>
+                    <td>{ad.entryTime ? convertEpochMsToDateTime(ad.entryTime) : "    "}</td>
+                    <td>{ad.exitTime ? convertEpochMsToDateTime(ad.exitTime) : "    "}</td>
+                    <td>{ad.parkingTime ? convertMiliSecondsToDistanceTime(ad.parkingTime) : "    "}</td>
+                    <td>
+                      <ReadMoreRoundedIcon
+                        className="read-more-icon"
+                        onClick={() => handleOpenModal(ad)} // Mở modal khi nhấp vào icon
+                      />
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <Popup trigger={buttonShowPopup} setTrigger={setButtonShowPopup}>
-        <div className="popupWrap">
-          <div className="productSummary">
-            <h3 className="productSummaryLeft">Edit Ads</h3>
-          </div>
-          <div className="addNewOrderWrap">
-            <div className="addNewOrderForm">
-              <div className="orderDetails">
-                {transactionData[selectedAd] && (
-                  <div className="input-group">
-                    <img src={transactionData[selectedAd].cropUrl} alt={transactionData[selectedAd].license_plate} style={{ width: "300px", height: "auto" }} />
-                  </div>    
-                )}   
+      {/* Modal hiển thị thông tin chi tiết */}
+      <Modal
+        id="detail-modal"
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box className="modal-box">
+          <Typography id="modal-title" variant="h6" component="h2">
+            Chi tiết thông tin
+          </Typography>
+          {selectedAd && (
+            <div className="modal-content">
+              <Typography>Biển số xe: {selectedAd.license_plate}</Typography>
+              <Typography>Thời gian vào: {convertEpochMsToDateTime(selectedAd.entryTime)}</Typography>
+              <Typography>Thời gian ra: {selectedAd.exitTime?convertEpochMsToDateTime(selectedAd.exitTime):"    "}</Typography>
+              <Typography>Thời gian đỗ: {selectedAd.entryTime&&selectedAd.exitTime ?convertMiliSecondsToDistanceTime(selectedAd.parkingTime):"    "}</Typography>
+              <div className="modal-images">
+                <img src={selectedAd.cropUrl} alt="Crop" className="crop-image" />
               </div>
-              <div className="productSummaryRight newUserSwitch" style={{ width: "100%" }}> 
-                <h3>Is Active </h3>
-                <input
-                  type="radio"
-                  name="rdo"
-                  id="yes"
-                  onChange={() => setUpdatedStatus(true)}
-                  defaultChecked="defaultChecked"
-                />
-                <input
-                  type="radio"
-                  name="rdo"
-                  id="no"
-                  onChange={() => setUpdatedStatus(false)}
-                />
-                <div className="switch">
-                  <label className="switchLabel" htmlFor="yes">
-                    Yes
-                  </label>
-                  <label className="switchLabel" htmlFor="no">
-                    No
-                  </label>
-                  <span></span>
-                </div>
+              <div className="modal-images">
+                <img src={selectedAd.fullUrl} alt="Full" className="full-image" />
               </div>
             </div>
-          </div>
-        </div>
-      </Popup>
+          )}
+        </Box>
+      </Modal>
     </div>
   );
 }
