@@ -481,6 +481,12 @@
   background-color: #EFEFEF;
 }
 
+.crop-image {
+  width: 120px;
+  height: auto;
+  object-fit: cover;
+}
+
 /* detail-modal */
 #detail-modal .modal-box {
   position: absolute;
