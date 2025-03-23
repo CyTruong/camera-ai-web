@@ -31,8 +31,8 @@ const ExportButton = ({ filename, data }) => {
         'Tên camera': item.camera_name,
         'Ảnh cắt nhỏ': item.cropUrl ? `http://171.244.16.229:8070/${item.cropUrl}` : '',
         'Ảnh đầy đủ': item.fullUrl ? `http://171.244.16.229:8070/${item.fullUrl}` : '',
-        'Thời gian xe vào': entryTime,
-        'Thời gian xe ra': exitTime,
+        'Thời gian xe vào': entryTime? entryTime : '',
+        'Thời gian xe ra': exitTime? exitTime : '',
         'Thời gian xe đỗ': parkingTime,
       };
     });
