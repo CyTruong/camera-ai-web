@@ -32,7 +32,7 @@ const OpenBarrierButton = ({ onStartOpen, onOpening, onOpenCompleted, onOpenFail
       </Button>
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color="blue" />
-        <div>Đang mở barrier...</div>
+        <div> Đang mở barrier...</div>
       </Backdrop>
     </>
   );

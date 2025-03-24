@@ -23,7 +23,7 @@ const CameraPopup = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [licensePlate, setLicensePlate] = useState("");
   const [mqttData, setMqttData] = useState(null);
-  const [barrierStatus, setBarrierStatus] = useState("Chưa mở cổng");
+  const [barrierStatus, setBarrierStatus] = useState("Chưa mở barrier");
   const [waitingBarrier, setWaitingBarrier] = useState(false);
   const autoOpenBarrier = localStorage.getItem("autoOpenBarier") === "true";
   const [autoClose, setAutoClose] = useState(localStorage.getItem("autoClose") === "true");
@@ -109,7 +109,7 @@ const CameraPopup = () => {
 
   useEffect(() => {
     if (autoOpenBarrier) {
-      setBarrierStatus("Đang mở cổng");
+      setBarrierStatus("Đang mở barrier");
       setWaitingBarrier(true);
       setTimeout(() => {
         setWaitingBarrier(false);
@@ -142,15 +142,15 @@ const CameraPopup = () => {
   };
 
   const handleOpening = () => {
-    setBarrierStatus("Cổng đang mở");
+    setBarrierStatus("Barrier đang mở");
   };
 
   const handleOpenCompleted = () => {
-    setBarrierStatus("Cổng đã mở");
+    setBarrierStatus("Barrier đã mở");
   };
 
   const handleOpenFailed = () => {
-    setBarrierStatus("Mở cổng thất bại");
+    setBarrierStatus("Mở barrier thất bại");
   };
 
   const getStatusClass = () => {
