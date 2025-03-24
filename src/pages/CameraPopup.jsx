@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Typography, Box } from "@mui/material";
+import { 
+  Container, 
+  Typography, 
+  Box, 
+  CircularProgress, 
+  Checkbox, 
+  Card,
+  CardMedia,
+  FormControl,
+  FormLabel
+} from "@mui/material";
 import MQTT from "paho-mqtt";
+import axios from "axios";
 import cameraMqttData from "../data/cameraMqttData.json";
+import OpenBarrierButton from "../Components/OpenBarrierButton";
 import "./css/camera_popup.css";
 
 const CameraPopup = () => {
@@ -11,6 +23,11 @@ const CameraPopup = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [licensePlate, setLicensePlate] = useState("");
   const [mqttData, setMqttData] = useState(null);
+  const [barrierStatus, setBarrierStatus] = useState("Chưa mở cổng");
+  const [waitingBarrier, setWaitingBarrier] = useState(false);
+  const autoOpenBarrier = localStorage.getItem("autoOpenBarier") === "true";
+  const [autoClose, setAutoClose] = useState(localStorage.getItem("autoClose") === "true");
+  const [countdown, setCountdown] = useState(10);
 
   // Hàm chuyển đổi đường dẫn ảnh thành URL
   const convertToUrl = (imagePath) => {
@@ -90,23 +107,112 @@ const CameraPopup = () => {
     }
   }, [mqttData]);
 
+  useEffect(() => {
+    if (autoOpenBarrier) {
+      setBarrierStatus("Đang mở cổng");
+      setWaitingBarrier(true);
+      setTimeout(() => {
+        setWaitingBarrier(false);
+        setBarrierStatus("Cổng đã mở");
+      }, 6000);
+    }
+  }, [autoOpenBarrier]);
+
+  useEffect(() => {
+    let timer;
+    if (autoClose) {
+      setCountdown(10);
+      timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            clearInterval(timer);
+            window.close();
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [autoClose]);
+
+  const handleAutoCloseChange = (e) => {
+    const isChecked = e.target.checked;
+    setAutoClose(isChecked);
+    localStorage.setItem("autoClose", isChecked ? "true" : "false");
+  };
+
+  const handleOpening = () => {
+    setBarrierStatus("Cổng đang mở");
+  };
+
+  const handleOpenCompleted = () => {
+    setBarrierStatus("Cổng đã mở");
+  };
+
+  const handleOpenFailed = () => {
+    setBarrierStatus("Mở cổng thất bại");
+  };
+
+  const getStatusClass = () => {
+    if (barrierStatus.includes("đang")) return "opening";
+    if (barrierStatus.includes("đã")) return "opened";
+    if (barrierStatus.includes("thất bại")) return "failed";
+    return "";
+  };
+
   return (
-    <Container className="camera-popup" maxWidth="md">
-      {/* Hình ảnh */}
-      <Box className="image-container">
-        <img src={imageUrl} alt={camera_name} className="img-fluid" style={{ width: '100%', maxHeight: '500px' }} />
+    <Container className="camera-popup-container" maxWidth="lg">
+      <Box className="popup-content-container">
+        <Card className="image-card">
+          <CardMedia
+            component="img"
+            image={imageUrl}
+            alt={camera_name}
+            sx={{ width: '100%', height: 'auto', maxHeight: 500 }}
+          />
+        </Card>
+
+        <Card className="info-card">
+          <Typography variant="h5" className="camera-name">
+            {mqttData?.displayName}
+          </Typography>
+
+          <Box className="license-plate-box">
+            <Typography variant="h2" className="license-plate">
+              {licensePlate}
+            </Typography>
+          </Box>
+
+          <Typography variant="h4" className={`barrier-status-text ${getStatusClass()}`}>
+            {barrierStatus}
+          </Typography>
+
+          {!autoOpenBarrier && (
+            <OpenBarrierButton 
+              onOpening={handleOpening} 
+              onOpenCompleted={handleOpenCompleted} 
+              onOpenFailed={handleOpenFailed}
+              sx={{ mt: 4 }}
+            />
+          )}
+
+          {waitingBarrier && (
+            <CircularProgress color="inherit" sx={{ mt: 4 }} />
+          )}
+        </Card>
       </Box>
 
-      {/* Tên camera */}
-      <Typography variant="h5" className="camera-name mt-3">
-        {mqttData?.displayName}
-      </Typography>
-
-      {/* Biển số xe */}
-      <Box className="license-plate-container mt-3">
-        <Typography variant="h2" className="license-plate">
-          {licensePlate}
-        </Typography>
+      <Box >
+        <FormControl className="checkbox-container">
+          <Checkbox
+            checked={autoClose}
+            onChange={handleAutoCloseChange}
+            color="primary"
+          />
+          <FormLabel id="count-down-text-id" style={{width : "200px"}}>
+            {autoClose ? `Tự động đóng sau ${countdown}s` : `Tự động đóng sau ${countdown}s`}
+          </FormLabel>
+        </FormControl>
       </Box>
     </Container>
   );

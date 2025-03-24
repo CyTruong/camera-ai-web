@@ -28,7 +28,7 @@ const Login = () => {
   };
 
   return (
-    <div className="bodyWrap" style={{ left: '145px' }}>
+    <div className="loginbodyWrap" style={{ left: '145px' }}>
     <div className="contentLoginWrap">
       <div className="loginSide">
         <div className="loginWrap">
