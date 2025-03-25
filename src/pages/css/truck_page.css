@@ -532,3 +532,21 @@
     padding: 10px 25px;
   }
 }
+
+.modal-images-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-images-column .crop-image {
+  width: 250px;
+  height: auto;
+}
+
+.modal-images-column .full-image {
+  width: 500px;
+  height: auto;
+}

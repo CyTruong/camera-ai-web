@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Collapse } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import HistoryIcon from '@mui/icons-material/History';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/NavigationBar.css';
 
 const NavigationBar = ({ isPin }) => {
   const [showNavBar, setShowNavBar] = useState(isPin);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,6 +39,10 @@ const NavigationBar = ({ isPin }) => {
     window.location.reload();
   };
 
+  const toggleHistory = () => {
+    setHistoryOpen(!historyOpen);
+  };
+
   return (
     <Drawer
       variant="persistent"
@@ -46,8 +54,8 @@ const NavigationBar = ({ isPin }) => {
         '& .MuiDrawer-paper': {
           width: 250,
           boxSizing: 'border-box',
-          backgroundColor: '#343a40', // Dark background color
-          color: '#fff', // Text color
+          backgroundColor: '#343a40',
+          color: '#fff',
         },
       }}
     >
@@ -69,23 +77,61 @@ const NavigationBar = ({ isPin }) => {
             </ListItemIcon>
             <ListItemText primary="Trang chủ" />
           </ListItem>
-          <ListItem button component={Link} to="/truck" className="nav-link">
+          
+          <ListItem button onClick={toggleHistory} className="nav-link">
             <ListItemIcon>
-              <DirectionsCarIcon sx={{ color: '#fff' }} />
+              <HistoryIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Xe công/ xe tải" />
+            <ListItemText primary="Lịch sử" />
+            {historyOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <ListItem button component={Link} to="/moto" className="nav-link">
+          
+          <Collapse in={historyOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem 
+                button 
+                component={Link} 
+                to="/truck" 
+                className="nav-link"
+                sx={{ pl: 4 }}
+              >
+                <ListItemIcon>
+                  <DirectionsCarIcon sx={{ color: '#fff' }} />
+                </ListItemIcon>
+                <ListItemText primary="Xe công/ xe tải" />
+              </ListItem>
+              <ListItem 
+                button 
+                component={Link} 
+                to="/moto" 
+                className="nav-link"
+                sx={{ pl: 4 }}
+              >
+                <ListItemIcon>
+                  <TwoWheelerIcon sx={{ color: '#fff' }} />
+                </ListItemIcon>
+                <ListItemText primary="Xe 2 bánh" />
+              </ListItem>
+              <ListItem 
+                button 
+                component={Link} 
+                to="/nhan-vien" 
+                className="nav-link"
+                sx={{ pl: 4 }}
+              >
+                <ListItemIcon>
+                  <PersonIcon sx={{ color: '#fff' }} />
+                </ListItemIcon>
+                <ListItemText primary="Nhân viên" />
+              </ListItem>
+            </List>
+          </Collapse>
+
+          <ListItem button component={Link} to="/signed-vehicle" className="nav-link">
             <ListItemIcon>
-              <TwoWheelerIcon sx={{ color: '#fff' }} />
+              <HomeIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Xe 2 bánh" />
-          </ListItem>
-          <ListItem button component={Link} to="/nhan-vien" className="nav-link">
-            <ListItemIcon>
-              <PersonIcon sx={{ color: '#fff' }} />
-            </ListItemIcon>
-            <ListItemText primary="Nhân viên" />
+            <ListItemText primary="Phương tiện đăng ký" />
           </ListItem>
         </List>
 

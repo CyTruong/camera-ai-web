@@ -4,7 +4,7 @@ import "./css/truck_page.css";
 import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
 import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
-import { Modal, Box, Typography } from "@mui/material"; // Import Modal và Box từ MUI
+import { Modal, Box, Typography, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
 
 function Truck() {
   const [transactionData, setTransactionData] = useState([]);
@@ -14,6 +14,7 @@ function Truck() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAd, setSelectedAd] = useState(null); // Lưu thông tin dòng được chọn
   const [openModal, setOpenModal] = useState(false); // State để điều khiển modal
+  const [selectedTab, setSelectedTab] = useState(0); // State to manage the selected tab
 
   const itemsPerPage = 10;
 
@@ -42,7 +43,7 @@ function Truck() {
   function convertToUrl(imagePath) {
     if (!imagePath || typeof imagePath !== "string") {
       // Return a default URL or empty string if the input is invalid
-      return "http://115.73.209.76:8092/placeholder.png";
+      return "";
     }
     const baseUrl = "http://171.244.16.229:8070";
     const filename = imagePath.split('/')[0];
@@ -51,6 +52,11 @@ function Truck() {
   // Hàm mở modal và hiển thị thông tin chi tiết
   const handleOpenModal = (ad) => {
     setSelectedAd(ad);
+    if(ad.enter_cropUrl != "") {
+      setSelectedTab(0);
+    } else {
+      setSelectedTab(1);
+    }
     setOpenModal(true);
   };
 
@@ -90,18 +96,20 @@ function Truck() {
       const formattedTransactions = allTransaction
         .filter(transaction => transaction.licensePlate.length < 15)
         .map(transaction => {
-          const smallLicensePlate = transaction.licensePlateOutSmall ? transaction.licensePlateOutSmall : transaction.licensePlateInSmall;
-          const fullLicensePlate = transaction.licensePlateOutFull ? transaction.licensePlateOutFull : transaction.licensePlateInFull;
-          const crop_url = convertToUrl(smallLicensePlate);
-          const full_url = convertToUrl(fullLicensePlate);
+          const exit_cropUrl = convertToUrl(transaction.licensePlateOutSmall);
+          const exit_fullUrl = convertToUrl(transaction.licensePlateOutFull);
+          const enter_cropUrl = convertToUrl(transaction.licensePlateInSmall);
+          const enter_fullUrl = convertToUrl(transaction.licensePlateInFull);
           const licensePlate = String(transaction.licensePlate).replace(/[^a-zA-Z0-9]/g, '');
           
           return {
             tracker_index: transaction._id,
             license_plate: licensePlate,
             camera_name: 'TRUCK',
-            cropUrl: crop_url,
-            fullUrl: full_url,
+            enter_cropUrl: enter_cropUrl,
+            enter_fullUrl: enter_fullUrl,
+            exit_cropUrl: exit_cropUrl,
+            exit_fullUrl: exit_fullUrl,
             entryTime: transaction.entryTime,
             exitTime: transaction.exitTime,
             parkingTime: transaction.parkingTime
@@ -124,6 +132,12 @@ function Truck() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+
+  const isValidImage = (url) => url && url.trim() !== "";
 
   return (
     <div className="bodyWrap">
@@ -194,7 +208,7 @@ function Truck() {
                   <tr key={ad.tracker_index}>
                     <td>{ad.license_plate}</td>
                     <td>
-                      <img src={ad.cropUrl} alt={ad.license_plate} className="crop-image" />
+                      <img src={ad.enter_cropUrl != "" ?ad.enter_cropUrl:ad.exit_cropUrl} alt={ad.license_plate} style={{maxHeight: "100px"}} className="crop-image" />
                     </td>
                     <td>{ad.entryTime ? convertEpochMsToDateTime(ad.entryTime) : "    "}</td>
                     <td>{ad.exitTime ? convertEpochMsToDateTime(ad.exitTime) : "    "}</td>
@@ -227,16 +241,51 @@ function Truck() {
           </Typography>
           {selectedAd && (
             <div className="modal-content">
-              <Typography>Biển số xe: {selectedAd.license_plate}</Typography>
-              <Typography>Thời gian vào: {convertEpochMsToDateTime(selectedAd.entryTime)}</Typography>
-              <Typography>Thời gian ra: {selectedAd.exitTime?convertEpochMsToDateTime(selectedAd.exitTime):"    "}</Typography>
-              <Typography>Thời gian đỗ: {selectedAd.entryTime&&selectedAd.exitTime ?convertMiliSecondsToDistanceTime(selectedAd.parkingTime):"    "}</Typography>
-              <div className="modal-images">
-                <img src={selectedAd.cropUrl} alt="Crop" className="crop-image" />
-              </div>
-              <div className="modal-images">
-                <img src={selectedAd.fullUrl} alt="Full" className="full-image" />
-              </div>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell component="th" scope="row">Biển số xe</TableCell>
+                      <TableCell>{selectedAd.license_plate}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">Thời gian vào</TableCell>
+                      <TableCell>{convertEpochMsToDateTime(selectedAd.entryTime)}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">Thời gian ra</TableCell>
+                      <TableCell>{selectedAd.exitTime ? convertEpochMsToDateTime(selectedAd.exitTime) : "    "}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">Thời gian đỗ</TableCell>
+                      <TableCell>{selectedAd.entryTime && selectedAd.exitTime ? convertMiliSecondsToDistanceTime(selectedAd.parkingTime) : "    "}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+              <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" centered>
+                <Tab 
+                  label="RA" 
+                  disabled={!isValidImage(selectedAd.enter_cropUrl) && !isValidImage(selectedAd.enter_fullUrl)} 
+                />
+                <Tab 
+                  label="VÀO" 
+                  disabled={!isValidImage(selectedAd.exit_cropUrl) && !isValidImage(selectedAd.exit_fullUrl)} 
+                />
+              </Tabs>
+              {selectedTab === 0 && (
+                <div className="modal-images-column">
+                  <img src={selectedAd.enter_cropUrl} alt="Enter Crop" className="crop-image" />
+                  <img src={selectedAd.enter_fullUrl} alt="Enter Full" className="full-image" />
+                </div>
+              )}
+              {selectedTab === 1 && (
+                <div className="modal-images-column">
+                  <img src={selectedAd.exit_cropUrl} alt="Exit Crop" className="crop-image" />
+                  <img src={selectedAd.exit_fullUrl} alt="Exit Full" className="full-image" />
+                </div>
+              )}
             </div>
           )}
         </Box>

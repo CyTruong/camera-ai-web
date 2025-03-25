@@ -65,7 +65,7 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
               <OpenBarrierButton />
             </Grid>
             <Typography variant="h6" textAlign="center" sx={{ marginTop: '16px' }}>
-              Tự động mở cổng: {autoOpen ? 'Bật' : 'Tắt'}
+              Tự động mở barrier: {autoOpen ? 'Bật' : 'Tắt'}
             </Typography>
             <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
               <ToggleButtonGroup
