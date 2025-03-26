@@ -1,28 +1,42 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress, Backdrop } from '@mui/material';
-import axios from 'axios';
+import { OpenBarrier } from '../BarrierControllers/BarrierController';
+
 
 const OpenBarrierButton = ({ onStartOpen, onOpening, onOpenCompleted, onOpenFailed }) => {
   const [loading, setLoading] = useState(false);
-
   const handleOpenBarrier = async () => {
-    if (onStartOpen) onStartOpen();
     setLoading(true);
-    if (onOpening) onOpening();
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    try {
-      const response = await axios.get('https://www.google.com/');
-      if (onOpenCompleted) {
+    OpenBarrier({
+      onStartOpen: () => {
+        if(onStartOpen) onStartOpen();
+        console.log("Barrier opening process started.");
+      },
+      onOpening: () => {
+        if(onOpening) onOpening();
+        console.log("Barrier is opening...");
+      },
+      onOpenCompleted: () => {
         setLoading(false);
-        onOpenCompleted(response);
-      }
-    } catch (error) {
-      setLoading(false);   
-      console.error('Failed to open barrier , error:', error);
-      if (onOpenFailed) onOpenFailed(error);
-    } finally {
-      
-    }
+        if(onOpenCompleted) onOpenCompleted();
+        console.log("Barrier has been successfully opened.");
+      },
+      onClosing: () => {
+        setLoading(true);
+        console.log("Barrier is closing...");
+      },
+      onClosingCompleted: () => {
+        console.log("Barrier has been successfully closed.");
+        setLoading(false); // Stop loading after the barrier is closed
+      },
+      onOpeningError: (error) => {
+        setLoading(false);
+        if(onOpenFailed) onOpenFailed();
+        console.error("Error during barrier operation:", error);
+      },
+      isAutoClose: true,
+      waittingTime: 10, // Wait for 10 seconds before auto-closing
+    });
   };
 
   return (

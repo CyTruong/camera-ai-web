@@ -16,6 +16,7 @@ import MQTT from "paho-mqtt";
 import axios from "axios";
 import cameraMqttData from "../data/cameraMqttData.json";
 import OpenBarrierButton from "../Components/OpenBarrierButton";
+import {OpenBarrier} from "../BarrierControllers/BarrierController";
 import "./css/camera_popup.css";
 
 const CameraPopup = () => {
@@ -109,12 +110,32 @@ const CameraPopup = () => {
 
   useEffect(() => {
     if (autoOpenBarrier) {
-      setBarrierStatus("Đang mở barrier");
-      setWaitingBarrier(true);
-      setTimeout(() => {
-        setWaitingBarrier(false);
-        setBarrierStatus("Cổng đã mở");
-      }, 6000);
+      OpenBarrier({
+        onStartOpen: () => {
+          setBarrierStatus("Đang bắt đầu mở barrier");
+        },
+        onOpening: () => {
+          setBarrierStatus("Đang mở barrier");
+          setWaitingBarrier(true);
+        },
+        onOpenCompleted: () => {
+          setBarrierStatus("Cổng đã mở");
+          setWaitingBarrier(false);
+        },
+        onClosing: () => {
+          setBarrierStatus("Đang đóng barrier");
+        },
+        onClosingCompleted: () => {
+          setBarrierStatus("Barrier đã đóng");
+        },
+        onOpeningError: (error) => {
+          setBarrierStatus("Mở barrier thất bại");
+          setWaitingBarrier(false);
+          console.error("Error during barrier operation:", error);
+        },
+        isAutoClose: true,
+        waittingTime: 10, // Wait for 10 seconds before auto-closing
+      });
     }
   }, [autoOpenBarrier]);
 
