@@ -266,11 +266,11 @@ function Truck() {
 
               <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example" centered>
                 <Tab 
-                  label="RA" 
+                  label="VÀO" 
                   disabled={!isValidImage(selectedAd.enter_cropUrl) && !isValidImage(selectedAd.enter_fullUrl)} 
                 />
                 <Tab 
-                  label="VÀO" 
+                  label="RA" 
                   disabled={!isValidImage(selectedAd.exit_cropUrl) && !isValidImage(selectedAd.exit_fullUrl)} 
                 />
               </Tabs>

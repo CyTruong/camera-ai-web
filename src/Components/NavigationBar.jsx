@@ -9,6 +9,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import HistoryIcon from '@mui/icons-material/History';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/NavigationBar.css';
 
@@ -129,7 +131,7 @@ const NavigationBar = ({ isPin }) => {
 
           <ListItem button component={Link} to="/signed-vehicle" className="nav-link">
             <ListItemIcon>
-              <HomeIcon sx={{ color: '#fff' }} />
+              <AssignmentIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Phương tiện đăng ký" />
           </ListItem>

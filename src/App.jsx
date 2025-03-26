@@ -4,6 +4,8 @@ import Homepage from './pages/Home';
 import Login from './pages/Login';
 import Motor from './pages/Motor'; 
 import Truck from './pages/Truck';
+import SignedVehicle from './pages/SignedVehicle';
+
 import { AuthLoginInfo } from './AuthComponents/AuthLogin';
 import PrivateRoute from './AuthComponents/PrivateRoute';
 import LoginRoute from './AuthComponents/LoginRoute';
@@ -47,7 +49,7 @@ function App() {
   };
 
   const hideNavBar = location.pathname.includes('/camera-popup') || location.pathname.includes('/login');
-  const isPin = location.pathname.includes('/moto') || location.pathname.includes('/truck');
+  const isPin = location.pathname.includes('/moto') || location.pathname.includes('/truck') || location.pathname.includes('/signed-vehicle');
 
   return (
     <>
@@ -126,6 +128,14 @@ function App() {
                 <Login />
               </LoginRoute>
             }
+          />
+          <Route
+            path="/signed-vehicle"
+            element={
+              <PrivateRoute>
+                <SignedVehicle />
+              </PrivateRoute>
+            } 
           />
           <Route
             path="/camera-popup/:camera_name"
