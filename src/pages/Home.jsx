@@ -83,8 +83,8 @@ const Home = () => {
     motorCaptureMqtt.onMessageArrived = (message) => {
       try {
         const jsonData = JSON.parse(message.payloadString);
-        if (jsonData.camera_name === "Camera 1" || jsonData.camera_name === "Camera 2") {
-          const cameraName = jsonData.camera_name.replace(" ", "_");
+        if (jsonData.camera_name.includes("Camera 1") || jsonData.camera_name.includes("Camera 2")) {
+          const cameraName = jsonData.camera_name.replace(/\s+/g, "_");
           const cameraData = localStorage.getItem(`${cameraName}_init_val`);
           if (!cameraData || cameraData.length === 0) {
             localStorage.setItem(`${cameraName}_init_val`, JSON.stringify(jsonData));
@@ -92,7 +92,7 @@ const Home = () => {
             window.open(
               `${window.location.origin}/camera-popup/${cameraName}`,
               '_blank',
-              'width=1010,height=410,top=100,left=100'
+              'width=1010,height=420,top=100,left=100'
             );
           }
           setTimeout(() => {

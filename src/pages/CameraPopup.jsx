@@ -43,6 +43,7 @@ const CameraPopup = () => {
   // Khởi tạo giá trị ban đầu từ localStorage
   useEffect(() => {
     const initVal = localStorage.getItem(`${camera_name}_init_val`);
+    localStorage.removeItem(`${camera_name}_init_val`);
     if (initVal) {
       const { full_path, license_plate } = JSON.parse(initVal);
       setImageUrl(convertToUrl(full_path));
