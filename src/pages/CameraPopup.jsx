@@ -16,8 +16,9 @@ import MQTT from "paho-mqtt";
 import axios from "axios";
 import cameraMqttData from "../data/cameraMqttData.json";
 import OpenBarrierButton from "../Components/OpenBarrierButton";
-import {OpenBarrier} from "../BarrierControllers/BarrierController";
+import {OpenBarrier, CloseBarrier} from "../BarrierControllers/BarrierController";
 import "./css/camera_popup.css";
+import CloseBarrierButton from "../Components/CloseBarrierButton";
 
 const CameraPopup = () => {
   const { camera_name } = useParams();
@@ -123,12 +124,12 @@ const CameraPopup = () => {
           setBarrierStatus("Cổng đã mở");
           setWaitingBarrier(false);
         },
-        onClosing: () => {
-          setBarrierStatus("Đang đóng barrier");
-        },
-        onClosingCompleted: () => {
-          setBarrierStatus("Barrier đã đóng");
-        },
+        // onClosing: () => {
+        //   setBarrierStatus("Đang đóng barrier");
+        // },
+        // onClosingCompleted: () => {
+        //   setBarrierStatus("Barrier đã đóng");
+        // },
         onOpeningError: (error) => {
           setBarrierStatus("Mở barrier thất bại");
           setWaitingBarrier(false);
@@ -175,6 +176,18 @@ const CameraPopup = () => {
     setBarrierStatus("Mở barrier thất bại");
   };
 
+  const handleClosing = () => {
+    setBarrierStatus("Barrier đang mở");
+  };
+
+  const handleCloseCompleted = () => {
+    setBarrierStatus("Barrier đã mở");
+  };
+
+  const handleCloseFailed = () => {
+    setBarrierStatus("Mở barrier thất bại");
+  };
+
   const getStatusClass = () => {
     if (barrierStatus.includes("đang")) return "opening";
     if (barrierStatus.includes("đã")) return "opened";
@@ -217,6 +230,13 @@ const CameraPopup = () => {
               sx={{ mt: 4 }}
             />
           )}
+
+          <CloseBarrierButton>
+            onClosing={handleClosing} 
+            onCloseCompleted={handleCloseCompleted} 
+            onCloseFailed={handleCloseFailed}
+            sx={{ mt: 4 }}
+          </CloseBarrierButton>
 
           {waitingBarrier && (
             <CircularProgress color="inherit" sx={{ mt: 4 }} />

@@ -3,6 +3,7 @@ import { Card, Grid, Typography, ButtonGroup, Button, ToggleButton, ToggleButton
 import './css/CameraSummaryInfo.css';
 import ExcelExportButton from './ExcelExportButton';
 import OpenBarrierButton from './OpenBarrierButton';
+import CloseBarrierButton from './CloseBarrierButton';
 
 const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEntering, carsExiting }) => {
   const [autoOpen, setAutoOpen] = useState(false);
@@ -63,6 +64,9 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
             <Typography variant="h5" textAlign="center">Barrier</Typography>
             <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
               <OpenBarrierButton />
+            </Grid>
+            <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
+              <CloseBarrierButton />
             </Grid>
             <Typography variant="h6" textAlign="center" sx={{ marginTop: '16px' }}>
               Tự động mở barrier: {autoOpen ? 'Bật' : 'Tắt'}
