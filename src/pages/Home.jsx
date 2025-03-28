@@ -83,7 +83,7 @@ const Home = () => {
     motorCaptureMqtt.onMessageArrived = (message) => {
       try {
         const jsonData = JSON.parse(message.payloadString);
-        if (jsonData.camera_name.includes("Camera 1") || jsonData.camera_name.includes("Camera 2")) {
+        if (true) {
           const cameraName = jsonData.camera_name.replace(/\s+/g, "_");
           const cameraData = localStorage.getItem(`${cameraName}_init_val`);
           if (!cameraData || cameraData.length === 0) {
