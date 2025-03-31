@@ -14,14 +14,14 @@ const CloseBarrierButton = ({ onStartClose, onClosing, onCloseCompleted, onClose
       },
       onClosing: () => {
         if(onClosing) onClosing();
-        console.log("Barrier is opening...");
+        console.log("Barrier is closing...");
       },
-      onOpenCompleted: () => {
+      onClosingCompleted: () => {
         setLoading(false);
         if(onCloseCompleted) onCloseCompleted();
         console.log("Barrier has been successfully opened.");
       },
-      onOpeningError: (error) => {
+      onClosingError: (error) => {
         setLoading(false);
         if(onCloseFailed) onCloseFailed();
         console.error("Error during barrier operation:", error);
