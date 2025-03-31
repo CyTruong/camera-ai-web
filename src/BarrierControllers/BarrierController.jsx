@@ -1,5 +1,4 @@
-import axios from 'axios';
-
+import axios from "axios";
 
 /**
  * Opens a barrier by sending a request to a specified API endpoint.
@@ -36,12 +35,18 @@ export function OpenBarrier({
       if (onOpening) onOpening();
       console.log("Sending request...");
       // Call the API to open the barrier
-      await axios.get("http://192.168.1.100/relay_cgi.cgi?type=0&relay=2&on=1&time=0&pwd=");
-
+      await axios.get(
+        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=2&on=1&time=0&pwd="
+      );
+      // Wait for 2 seconds before sending the second API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await axios.get(
+        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=2&on=0&time=0&pwd="
+      );
       // Notify that the barrier has been opened
       if (onOpenCompleted) onOpenCompleted();
     } catch (error) {
-       if (onOpeningError) onOpeningError(error);
+      if (onOpeningError) onOpeningError(error);
       console.error("Error during barrier operation:", error);
     }
   };
@@ -49,7 +54,6 @@ export function OpenBarrier({
   // Start the thread
   thread();
 }
-
 
 /**
  * Function to handle the process of closing a barrier.
@@ -78,13 +82,18 @@ export function CloseBarrier({
       if (onClosing) onClosing();
       console.log("Sending request...");
       // Call the API to open the barrier
-      await axios.get("http://192.168.1.100/relay_cgi.cgi?type=0&relay=2&on=0&time=0&pwd=");
+      await axios.get(
+        "https://192.168.1.100/relay_cgi.cgi?type=0&relay=3&on=1&time=0&pwd="
+      );
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await axios.get(
+        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=3&on=0&time=0&pwd="
+      );
 
       // Notify that the barrier has been opened
       if (onClosingCompleted) onClosingCompleted();
-
     } catch (error) {
-       if (onClosingError) onClosingError(error);
+      if (onClosingError) onClosingError(error);
       console.error("Error during barrier operation:", error);
     }
   };
