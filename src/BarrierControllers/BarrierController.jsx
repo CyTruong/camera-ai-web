@@ -83,7 +83,7 @@ export function CloseBarrier({
       console.log("Sending request...");
       // Call the API to open the barrier
       await axios.get(
-        "https://192.168.1.100/relay_cgi.cgi?type=0&relay=3&on=1&time=0&pwd="
+        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=3&on=1&time=0&pwd="
       );
       await new Promise((resolve) => setTimeout(resolve, 2000));
       await axios.get(
