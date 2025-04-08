@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Grid, Typography, ButtonGroup, Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Card, Grid, Typography, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import axios from 'axios';
 import './css/CameraSummaryInfo.css';
 import ExcelExportButton from './ExcelExportButton';
 import OpenBarrierButton from './OpenBarrierButton';
@@ -12,10 +13,27 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
 
   const fileName = 'CameraSummary';
 
+  // Function to handle barrier request
+  const handleBarrierRequest = async (url) => {
+    try {
+      console.log("Sending request...");
+      await axios.get(url);
+    } catch (error) {
+      console.error("Error during barrier operation:", error);
+    }
+  };
+
   const handleChange = (event, value) => {
     if (value !== null) {
       setAutoOpen(value);
-      localStorage.setItem('autoOpenBarier', value);
+      localStorage.setItem('autoOpenBarier', value.toString());
+
+      // Determine which API endpoint to call based on toggle value
+      const url = value
+        ? "http://192.168.1.90:3001/disable-barrier"
+        : "http://192.168.1.90:3001/active-barrier";
+
+      handleBarrierRequest(url);
     }
   };
 
@@ -50,6 +68,7 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
           </Grid>
         </Grid>
       </Card>
+
       <Grid container spacing={4} sx={{ marginTop: '16px' }}>
         <Grid item xs={12} md={6}>
           <Card className="functions-pannel" sx={{ borderRadius: '15px', padding: '20px' }}>

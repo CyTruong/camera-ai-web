@@ -36,13 +36,11 @@ export function OpenBarrier({
       console.log("Sending request...");
       // Call the API to open the barrier
       await axios.get(
-        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=2&on=1&time=0&pwd="
+	      "http://192.168.1.90:3001/open-truck-barrier"
       );
+
       // Wait for 2 seconds before sending the second API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await axios.get(
-        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=2&on=0&time=0&pwd="
-      );
       // Notify that the barrier has been opened
       if (onOpenCompleted) onOpenCompleted();
     } catch (error) {
@@ -82,13 +80,10 @@ export function CloseBarrier({
       if (onClosing) onClosing();
       console.log("Sending request...");
       // Call the API to open the barrier
-      await axios.get(
-        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=3&on=1&time=0&pwd="
+	await axios.get(
+              "http://192.168.1.90:3001/close-truck-barrier"
       );
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await axios.get(
-        "http://192.168.1.100/relay_cgi.cgi?type=0&relay=3&on=0&time=0&pwd="
-      );
 
       // Notify that the barrier has been opened
       if (onClosingCompleted) onClosingCompleted();
