@@ -49,6 +49,18 @@ const Home = () => {
   };
 
   useEffect(() => {
+    // Remove all local storage items with keys containing "_init_val"
+    Object.keys(localStorage).forEach((key) => {
+      if (key.includes("_init_val")) {
+        localStorage.removeItem(key);
+      }
+    });
+
+    setCameraDisplayCards(cameraDisplayCardsData);
+    loadTransactionData();
+  }, []);
+
+  useEffect(() => {
     const enter = transactions.filter((vehicle) => vehicle.camera_name === "Camera 1");
     const exit = transactions.filter((vehicle) => vehicle.camera_name === "Camera 2");
     const parking = transactions.filter((vehicle) => vehicle.entryTime && !vehicle.exitTime).length;
@@ -92,7 +104,7 @@ const Home = () => {
             window.open(
               `${window.location.origin}/camera-popup/${cameraName}`,
               '_blank',
-              'width=1010,height=420,top=100,left=100'
+              'width=1152,height=545,top=100,left=100'
             );
           }
           setTimeout(() => {

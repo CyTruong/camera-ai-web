@@ -1,51 +1,51 @@
 [
   {
-    "name": "Camera_1",
+    "name": "Camera_1_1",
     "url": "103.116.8.51",
     "port": 9001,
     "topic": "cameraai/GPG",
     "displayName": "Camera xe vào"
   },
   {
-    "name": "camera2",
+    "name": "Camera_1_2",
     "url": "103.116.8.51",
     "port": 9001,
-    "topic": "camera/2",
+    "topic": "cameraai/GPG",
     "displayName": "Camera người vào"
   },
   {
-    "name": "camera3",
+    "name": "Camera_2_1",
     "url": "103.116.8.51",
     "port": 9001,
-    "topic": "camera/3",
+    "topic": "cameraai/GPG",
     "displayName": "Camera container vào"
   },
   {
-    "name": "Camera_2",
+    "name": "Camera_2_2",
     "url": "103.116.8.51",
     "port": 9001,
     "topic": "cameraai/GPG",
     "displayName": "Camera người ra"
   },
   {
-    "name": "camera5",
+    "name": "Camera_2_3",
     "url": "103.116.8.51",
     "port": 9001,
-    "topic": "camera/5",
+    "topic": "cameraai/GPG",
     "displayName": "Camera container ra"
   },
   {
-    "name": "camera6",
+    "name": "Camera_1_3",
     "url": "103.116.8.51",
     "port": 9001,
-    "topic": "camera/6",
+    "topic": "cameraai/GPG",
     "displayName": "Camera container ra"
   },
   {
-    "name": "camera7",
+    "name": "Camera_1_4",
     "url": "103.116.8.51",
     "port": 9001,
-    "topic": "camera/7",
+    "topic": "cameraai/GPG",
     "displayName": "Camera tổng"
   }
 ]
