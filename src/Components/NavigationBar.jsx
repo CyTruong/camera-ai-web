@@ -56,8 +56,8 @@ const NavigationBar = ({ isPin }) => {
         '& .MuiDrawer-paper': {
           width: 250,
           boxSizing: 'border-box',
-          backgroundColor: '#ff7a7a',
-          borderRight: '2px solid #fa1616',
+          backgroundColor: '#f7f8f9',
+          borderRight: '1px solid #fa1616',
           color: '#fff',
         },
       }}
@@ -67,7 +67,7 @@ const NavigationBar = ({ isPin }) => {
         <Link
           to="/"
           className="navbar-brand p-3 text-white text-decoration-none fs-4"
-          style={{ backgroundColor: '#212529', textAlign: 'center' }}
+          style={{ backgroundColor: '#fa1616', textAlign: 'center'  }}
         >
           Camera AI
         </Link>
@@ -76,17 +76,17 @@ const NavigationBar = ({ isPin }) => {
         <List>
           <ListItem button component={Link} to="/" className="nav-link">
             <ListItemIcon>
-              <HomeIcon sx={{ color: '#fff' }} />
+              <HomeIcon sx={{ color: '#000000' }} />
             </ListItemIcon>
-            <ListItemText primary="Trang chủ" />
+            <ListItemText  sx={{ color: '#000000' }} primary="Trang chủ" />
           </ListItem>
           
           <ListItem button onClick={toggleHistory} className="nav-link">
             <ListItemIcon>
-              <HistoryIcon sx={{ color: '#fff' }} />
+              <HistoryIcon  sx={{ color: '#000000' }}/>
             </ListItemIcon>
-            <ListItemText primary="Lịch sử" />
-            {historyOpen ? <ExpandLess /> : <ExpandMore />}
+            <ListItemText  sx={{ color: '#000000' }} primary="Lịch sử" />
+            {historyOpen ? <ExpandLess  sx={{ color: '#000000' }} /> : <ExpandMore  sx={{ color: '#000000' }} />}
           </ListItem>
           
           <Collapse in={historyOpen} timeout="auto" unmountOnExit>
@@ -99,9 +99,9 @@ const NavigationBar = ({ isPin }) => {
                 sx={{ pl: 4 }}
               >
                 <ListItemIcon>
-                  <DirectionsCarIcon sx={{ color: '#fff' }} />
+                  <DirectionsCarIcon sx={{ color: '#000000' }} />
                 </ListItemIcon>
-                <ListItemText primary="Xe công/ xe tải" />
+                <ListItemText  sx={{ color: '#000000' }} primary="Xe công/ xe tải" />
               </ListItem>
               <ListItem 
                 button 
@@ -111,9 +111,9 @@ const NavigationBar = ({ isPin }) => {
                 sx={{ pl: 4 }}
               >
                 <ListItemIcon>
-                  <TwoWheelerIcon sx={{ color: '#fff' }} />
+                  <TwoWheelerIcon  sx={{ color: '#000000' }} />
                 </ListItemIcon>
-                <ListItemText primary="Xe 2 bánh" />
+                <ListItemText  sx={{ color: '#000000' }} primary="Xe 2 bánh" />
               </ListItem>
               {/* <ListItem 
                 button 
@@ -132,9 +132,9 @@ const NavigationBar = ({ isPin }) => {
 
           <ListItem button component={Link} to="/signed-vehicle" className="nav-link">
             <ListItemIcon>
-              <AssignmentIcon sx={{ color: '#fff' }} />
+              <AssignmentIcon  sx={{ color: '#000000' }} />
             </ListItemIcon>
-            <ListItemText primary="Phương tiện đăng ký" />
+            <ListItemText  sx={{ color: '#000000' }} primary="Phương tiện đăng ký" />
           </ListItem>
         </List>
 
@@ -144,9 +144,9 @@ const NavigationBar = ({ isPin }) => {
         <List className="mt-auto">
           <ListItem button onClick={handleLogout} className="nav-link">
             <ListItemIcon>
-              <ExitToAppIcon sx={{ color: '#fff' }} />
+              <ExitToAppIcon  sx={{ color: '#000000' }} />
             </ListItemIcon>
-            <ListItemText primary="Đăng xuất" />
+            <ListItemText  sx={{ color: '#000000' }} primary="Đăng xuất" />
           </ListItem>
         </List>
       </div>
