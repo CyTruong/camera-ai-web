@@ -138,8 +138,9 @@
 }
 
 .exportOrderText {
+  min-width: 100px;
   font-weight: bold;
-  font-size: 17px;
+  font-size: 15px;
   padding-left: 5px;
 }
 
@@ -592,6 +593,46 @@
 }
 
 #note-modal  .modal-images .full-image {
+  width: 500px;
+}
+
+
+/*note-modal */
+#export-modal .modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  background-color: var(--background-paper, #fff);
+  box-shadow: 24px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#export-modal .modal-content {
+  text-align: center;
+}
+
+#export-modal .modal-images {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+#export-modal .modal-images img {
+  height: auto;
+}
+
+#export-modal .modal-images .crop-image {
+  width: 250px;
+}
+
+#export-modal  .modal-images .full-image {
   width: 500px;
 }
 

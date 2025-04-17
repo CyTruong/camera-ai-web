@@ -2,18 +2,33 @@ import React from 'react';
 import { Button } from '@mui/material';
 import * as XLSX from 'xlsx';
 
-const ExportButton = ({ filename, data, buttonTitle }) => {
+const ExportButton = ({ filename, data, startTime, endTime, buttonTitle, buttonVariant, buttonColor , disabled = false}) => {
   const handleExport = () => {
     // Transform the data
-    const transformedData = data.map((item) => {
-      const entryTime = new Date(item.entryTime).toLocaleTimeString('vi-VN', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
+    console.log('Start time:', startTime);
+    console.log('End time:', endTime);
+    if (startTime && endTime) {
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+      data = data.filter((item) => {
+        const entryTime = new Date(item.entryTime);
+        const exitTime = new Date(item.exitTime);
+        const checkTime = entryTime > exitTime ? entryTime : exitTime; 
+        return checkTime >= startDate && checkTime <= endDate;
       });
+      console.log('Filtered data:', data);
+    }
+    const transformedData = data.map((item) => {
+      const entryTime = item.entryTime
+        ? new Date(item.entryTime).toLocaleTimeString('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          })
+        : '';
       const exitTime = item.exitTime
         ? new Date(item.exitTime).toLocaleTimeString('vi-VN', {
             hour: '2-digit',
@@ -25,25 +40,26 @@ const ExportButton = ({ filename, data, buttonTitle }) => {
           })
         : '';
       const parkingTime = item.parkingTime ? `${item.parkingTime / 1000} s` : '';
-
+      const vehicaleType = item.camera_name.includes('TRUCK')? 'Xe tải/ Container' : item.camera_name.includes('MOTO') ? 'Xe máy' : 'Chưa xác định';
       return {
         'Bảng số xe': item.license_plate,
-        'Tên camera': item.camera_name,
-        'Ảnh xe vào đầy đủ': item.licensePlateInFull
-          ? `http://171.244.16.229:8070/${item.licensePlateInFull}`
+        'Tên camera': vehicaleType,
+        'Ảnh xe vào đầy đủ': item.enter_fullUrl
+          ? `${item.enter_fullUrl}`
           : '',
-        'Ảnh xe vào cắt nhỏ': item.licensePlateInSmall
-          ? `http://171.244.16.229:8070/${item.licensePlateInSmall}`
+        'Ảnh xe vào cắt nhỏ': item.enter_cropUrl
+          ? `${item.enter_cropUrl}`
           : '',
-        'Ảnh xe ra đầy đủ': item.licensePlateOutFull
-          ? `http://171.244.16.229:8070/${item.licensePlateOutFull}`
+        'Ảnh xe ra đầy đủ': item.exit_fullUrl
+          ? `${item.exit_fullUrl}`
           : '',
-        'Ảnh xe ra cắt nhỏ': item.licensePlateOutSmall
-          ? `http://171.244.16.229:8070/${item.licensePlateOutSmall}`
+        'Ảnh xe ra cắt nhỏ': item.exit_cropUrl
+          ? `${item.exit_cropUrl}`
           : '',
         'Thời gian xe vào': entryTime ? entryTime : '',
         'Thời gian xe ra': exitTime ? exitTime : '',
         'Thời gian xe đỗ': parkingTime,
+        'Ghi chú': item.note,
       };
     });
 
@@ -54,13 +70,14 @@ const ExportButton = ({ filename, data, buttonTitle }) => {
     const colWidths = [
       { wch: 15 }, // bảng số xe
       { wch: 15 }, // tên camera
-      { wch: 30 }, // ảnh xe vào đầy đủ
-      { wch: 30 }, // ảnh xe vào cắt nhỏ
-      { wch: 30 }, // ảnh xe ra đầy đủ
-      { wch: 30 }, // ảnh xe ra cắt nhỏ
+      { wch: 45 }, // ảnh xe vào đầy đủ
+      { wch: 45 }, // ảnh xe vào cắt nhỏ
+      { wch: 45 }, // ảnh xe ra đầy đủ
+      { wch: 45 }, // ảnh xe ra cắt nhỏ
       { wch: 20 }, // thời gian xe vào
       { wch: 20 }, // thời gian xe ra
       { wch: 20 }, // thời gian xe đỗ
+      { wch: 60 }, // ghi chú
     ];
     worksheet['!cols'] = colWidths;
 
@@ -123,7 +140,7 @@ const ExportButton = ({ filename, data, buttonTitle }) => {
   };
 
   return (
-    <Button variant="contained" color="primary" onClick={handleExport} style={{ margin: '10px' }}>
+    <Button fullWidth sx={{  mb: 2, height: 56 }} variant={buttonVariant} color= {buttonColor} disabled = {disabled} onClick={handleExport}>
       {buttonTitle?buttonTitle:'Xuất Excel'}
     ️
     </Button>

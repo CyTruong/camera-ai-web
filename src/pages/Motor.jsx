@@ -1,14 +1,36 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import axios from "axios";
 import "./css/motor_page.css";
 import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
+import ExcelExportButton from './../Components/ExcelExportButton';
 import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import BackupTableIcon from '@mui/icons-material/BackupTable';
-
-import { Modal, Box, Typography, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Paper ,TextField, Stack,Button } from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import BackupTableIcon from "@mui/icons-material/BackupTable";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { vi } from "date-fns/locale"; // Vietnamese locale
+import {
+  Divider,
+  Grid,
+  Modal,
+  Box,
+  Typography,
+  Tabs,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TextField,
+  Stack,
+  Button,
+  IconButton,
+} from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
 
 function Motor() {
   const [transactionData, setTransactionData] = useState([]);
@@ -19,10 +41,21 @@ function Motor() {
   const [selectedAd, setSelectedAd] = useState(null); // Lưu thông tin dòng được chọn
   const [openDetailModal, setOpenDetailModal] = useState(false); // State để điều khiển modal
   const [openNoteModal, setOpenNoteModal] = useState(false); // State để điều khiển modal ghi chú
+  const [openExportModal, setOpenExportModal] = useState(false); // State để điều khiển modal xuất dữ liệu
   const [selectedTab, setSelectedTab] = useState(0); // State to manage the selected tab
-
+  const [fileName, setFileName] = useState(
+    `Danh_sach_moto_${new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")}`
+  );
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
   const itemsPerPage = 10;
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayStartEpoch = Math.floor(todayStart.getTime());
 
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+  const todayEndEpoch = Math.floor(todayEnd.getTime());
   function convertMiliSecondsToDistanceTime(milliseconds) {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const days = Math.floor(totalSeconds / (24 * 3600));
@@ -213,10 +246,10 @@ function Motor() {
               <button
                 className="exportOrder"
                 onClick={() => {
-                 
+                  setOpenExportModal(true);
                 }}
               >
-                <span className="exportOrderText">Export Excel</span>
+                <span className="exportOrderText">Xuất Excel</span>
                 <BackupTableIcon />
               </button>
             </div>
@@ -476,6 +509,111 @@ function Motor() {
               </Stack>
             </div>
           )}
+        </Box>
+      </Modal>
+
+      <Modal
+        id="export-modal"
+        open={openExportModal}
+        onClose={() => setOpenExportModal(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          className="modal-box"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 500,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 3,
+            borderRadius: 1,
+          }}
+        >
+          <Typography
+            id="export-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ mb: 3 }}
+            style={{ color: "#ff0000", marginBottom: "1rem" }}
+          >
+            Xuất Excel 
+          </Typography>
+          <TextField
+            fullWidth
+            value={fileName}
+            onChange={(e) => setFileName(e.target.value)}
+            placeholder="Nhập tên file"
+            sx={{ mb: 2 }}
+          />
+
+          <Grid container spacing={3}>
+            {/* Left Column */}
+            <Grid item xs={6}>
+              <div style={{ width: "100%" , marginBottom : '20px'}}>
+                <DatePicker
+                  selectsRange
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={(update) => setDateRange(update)}
+                  locale={vi}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="Chọn khoảng thời gian"
+                  isClearable
+                  customInput={
+                    <TextField fullWidth size="small" sx={{ mb: 1 , width : 270 , height : 37 , marginTop : 1 }} />
+                  }
+                />
+              </div>
+
+              <ExcelExportButton
+                data={transactionData}
+                startTime={startDate}
+                endTime={endDate}
+                filename={fileName}
+                buttonTitle={"Xuất trong thời gian trên"}
+                buttonVariant="contained"
+                buttonColor="primary"
+                disabled={!startDate || !endDate}
+                />
+           
+            </Grid>
+
+            {/* Right Column */}
+            <Grid item xs={6}>
+              <ExcelExportButton
+                data={transactionData}
+                filename={fileName}
+                startTime={null}
+                endTime={null}
+                buttonTitle={"Xuất toàn bộ"}
+                buttonVariant="outlined"
+                buttonColor="secondary"
+                disabled={false}
+                />
+             
+             <ExcelExportButton
+                data={transactionData}
+                filename={fileName}
+                // currentDateTime  
+                startTime={todayStartEpoch}
+                endTime={todayEndEpoch}
+                buttonTitle={"Xuất dữ liệu hôm nay"}
+                buttonVariant="outlined"
+                buttonColor="success"
+                disabled={false}
+                />
+
+             
+            </Grid>
+          </Grid>
+
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+            <Button onClick={() => setOpenExportModal(false)}>Hủy</Button>
+          </Box>
         </Box>
       </Modal>
     </div>
