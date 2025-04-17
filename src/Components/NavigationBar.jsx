@@ -56,7 +56,8 @@ const NavigationBar = ({ isPin }) => {
         '& .MuiDrawer-paper': {
           width: 250,
           boxSizing: 'border-box',
-          backgroundColor: '#343a40',
+          backgroundColor: '#ff7a7a',
+          borderRight: '2px solid #fa1616',
           color: '#fff',
         },
       }}
@@ -66,9 +67,9 @@ const NavigationBar = ({ isPin }) => {
         <Link
           to="/"
           className="navbar-brand p-3 text-white text-decoration-none fs-4"
-          style={{ backgroundColor: '#212529' }}
+          style={{ backgroundColor: '#212529', textAlign: 'center' }}
         >
-          Camera AI Web
+          Camera AI
         </Link>
 
         {/* Navigation Links */}

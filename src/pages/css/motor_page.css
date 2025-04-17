@@ -121,6 +121,30 @@
   padding-left: 5px;
 }
 
+.exportOrder {
+  padding: 10px 45px;
+  border: 2px solid #EF5F63;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 25px;
+}
+
+.exportOrder:hover {
+  color: #fff;
+  background: #EF5F63;
+}
+
+.exportOrderText {
+  font-weight: bold;
+  font-size: 17px;
+  padding-left: 5px;
+}
+
 .orderWrap {
   position: relative;
   width: 100%;

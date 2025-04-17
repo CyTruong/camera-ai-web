@@ -6,6 +6,7 @@ import Pagination from "../Components/Pagination";
 import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
 
 import { Modal, Box, Typography, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Paper ,TextField, Stack,Button } from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
 
@@ -209,6 +210,15 @@ function Motor() {
                 dataType="Motor"
                 status={filterTransaction}
               />
+              <button
+                className="exportOrder"
+                onClick={() => {
+                 
+                }}
+              >
+                <span className="exportOrderText">Export Excel</span>
+                <BackupTableIcon />
+              </button>
             </div>
           </div>
           <div className="orderWrap">
@@ -441,8 +451,16 @@ function Motor() {
                 }}
               />
 
-              <Stack direction="row" justifyContent="flex-end" spacing={2} style={{ marginTop: "20px" }}>
-                <Button variant="outlined" onClick={()=> setOpenNoteModal(false)}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                spacing={2}
+                style={{ marginTop: "20px" }}
+              >
+                <Button
+                  variant="outlined"
+                  onClick={() => setOpenNoteModal(false)}
+                >
                   Cancel
                 </Button>
                 <Button
