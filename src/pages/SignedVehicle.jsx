@@ -89,7 +89,7 @@ function SignedVehicle() {
   const handleAddVehicle = async () => {
     try {
       const token = localStorage.getItem("token");
-      console.log("Vehicle added:",voucherDetails );
+      console.log("Vehicle added:", voucherDetails);
       const response = await axios.post(
         "http://171.244.16.229:8093/api/users/createUserWithPlates",
         voucherDetails,
@@ -108,6 +108,7 @@ function SignedVehicle() {
         vehiclePlates: [""],
         carType: "TRUCK",
       });
+      fetchVehicles();
     } catch (err) {
       console.error("Error adding vehicle:", err);
     }
@@ -121,7 +122,9 @@ function SignedVehicle() {
   };
 
   const handleRemoveLicensePlate = (index) => {
-    const updatedPlates = voucherDetails.vehiclePlates.filter((_, i) => i !== index);
+    const updatedPlates = voucherDetails.vehiclePlates.filter(
+      (_, i) => i !== index
+    );
     setVoucherDetails({
       ...voucherDetails,
       vehiclePlates: updatedPlates,
@@ -221,9 +224,7 @@ function SignedVehicle() {
                     <tr key={ad._id}>
                       <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                       <td>
-                        {ad.carType === "TRUCK"
-                          ? "Xe tải/Container"
-                          : "Xe máy"}
+                        {ad.carType === "TRUCK" ? "Xe tải/Container" : "Xe máy"}
                       </td>
                       <td>{ad.licensePlate}</td>
                       <td>{ad.userName}</td>
@@ -259,17 +260,23 @@ function SignedVehicle() {
         aria-describedby="modal-description"
       >
         <Box className="modal-box">
-          <Typography id="modal-title" variant="h5" component="h2" style={{ color: '#ff0000', marginBottom: '1rem' }}>
+          <Typography
+            id="modal-title"
+            variant="h5"
+            component="h2"
+            style={{ color: "#ff0000", marginBottom: "1rem" }}
+          >
             Đăng ký mới phương tiện
           </Typography>
+
           <div className="popupWrap">
             <div className="addNewOrderWrap">
               <div className="addNewOrderForm">
                 <div className="orderDetails">
+                  {/* Vehicle Type */}
                   <div className="input-group">
                     <select
                       className="orderDetailsSelect"
-                      placeholder="Loại phương tiện"
                       value={voucherDetails.carType}
                       onChange={(e) =>
                         setVoucherDetails({
@@ -277,16 +284,19 @@ function SignedVehicle() {
                           carType: e.target.value,
                         })
                       }
-                      required="required"
+                      required
                     >
+                      <option value="">Loại phương tiện *</option>
                       <option value="TRUCK">Xe tải / Xe Container</option>
                       <option value="MOTO">Xe moto / Xe 2 bánh</option>
                     </select>
                   </div>
+
+                  {/* Vehicle Name */}
                   <div className="input-group">
                     <input
                       type="text"
-                      placeholder="Tên phương tiện"
+                      placeholder="Tên phương tiện *"
                       className="orderDetailsInput"
                       value={voucherDetails.displayName}
                       onChange={(e) =>
@@ -295,12 +305,15 @@ function SignedVehicle() {
                           displayName: e.target.value,
                         })
                       }
+                      required
                     />
                   </div>
+
+                  {/* Username */}
                   <div className="input-group">
                     <input
                       type="text"
-                      placeholder="Tên người dùng"
+                      placeholder="Tên người dùng *"
                       className="orderDetailsInput"
                       value={voucherDetails.username}
                       onChange={(e) =>
@@ -309,12 +322,14 @@ function SignedVehicle() {
                           username: e.target.value,
                         })
                       }
+                      required
                     />
                   </div>
+
+                  {/* User Type */}
                   <div className="input-group">
                     <select
                       className="orderDetailsSelect"
-                      placeholder="Loại người dùng"
                       value={voucherDetails.userType}
                       onChange={(e) =>
                         setVoucherDetails({
@@ -322,24 +337,29 @@ function SignedVehicle() {
                           userType: e.target.value,
                         })
                       }
-                      required="required"
+                      required
                     >
+                      <option value="">Loại người dùng *</option>
                       <option value="NHAN_VIEN">Nhân viên</option>
                       <option value="KHACH_VANG_LAI">Khách vãng lai</option>
                       <option value="DOI_TAC">Đối tác</option>
-                      <option value="CONG_TY_THANH_VIEN">Công ty thành viên</option>
+                      <option value="CONG_TY_THANH_VIEN">
+                        Công ty thành viên
+                      </option>
                       <option value="TONG_CONG_TY">Tổng công ty</option>
                     </select>
                   </div>
                 </div>
               </div>
+
+              {/* License Plates Section */}
               <div className="productDetails">
                 <div className="newOrderTable">
                   <table style={{ width: "100%", padding: "0 1rem" }}>
                     <thead>
                       <tr>
                         <th>STT</th>
-                        <th>Biển số xe</th>
+                        <th>Biển số xe *</th>
                         <th>Thao tác</th>
                       </tr>
                     </thead>
@@ -351,10 +371,12 @@ function SignedVehicle() {
                             <input
                               style={{ textAlign: "center" }}
                               type="text"
+                              placeholder="Nhập biển số"
                               value={plate}
                               onChange={(e) =>
                                 handleLicensePlateChange(index, e.target.value)
                               }
+                              required
                             />
                           </td>
                           <td>
@@ -372,6 +394,7 @@ function SignedVehicle() {
                 </div>
                 <div className="input-group">
                   <span
+                    type="button"
                     className="addNewLine clickable"
                     onClick={handleAddLicensePlate}
                   >
@@ -381,11 +404,36 @@ function SignedVehicle() {
               </div>
             </div>
 
+            {/* Submit Button */}
             <div className="submitWrap">
               <div className="submitNewVehicle">
                 <button
                   className="submitNewOrderBtn"
-                  onClick={handleAddVehicle}
+                  onClick={() => {
+                    // Validate all required fields
+                    const isVehicleTypeValid = !!voucherDetails.carType;
+                    const isVehicleNameValid = !!voucherDetails.displayName;
+                    const isUsernameValid = !!voucherDetails.username;
+                    const isUserTypeValid = !!voucherDetails.userType;
+                    const isPlatesValid =
+                      voucherDetails.vehiclePlates.every((plate) => !!plate) &&
+                      voucherDetails.vehiclePlates.length > 0;
+
+                    if (
+                      isVehicleTypeValid &&
+                      isVehicleNameValid &&
+                      isUsernameValid &&
+                      isUserTypeValid &&
+                      isPlatesValid
+                    ) {
+                      handleAddVehicle();
+                    } else {
+                      // Show error messages by setting a state if you want to highlight errors
+                      alert(
+                        "Vui lòng điền đầy đủ các trường bắt buộc (có dấu *)"
+                      );
+                    }
+                  }}
                 >
                   <AddCircleOutlineRoundedIcon />
                   <span className="addOrderText">Thêm</span>
