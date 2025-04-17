@@ -20,6 +20,7 @@ import "./css/camera_popup.css";
 import CloseBarrierButton from "../Components/CloseBarrierButton";
 import OpenBarrierButton from "../Components/OpenBarrierButton";
 
+
 const CameraPopup = () => {
   const { camera_name } = useParams();
   const [imageUrl, setImageUrl] = useState("");
@@ -220,8 +221,11 @@ const CameraPopup = () => {
           <Typography variant="h4" className={`barrier-status-text ${getStatusClass()}`}>
             {barrierStatus}
           </Typography>
-
-          <OpenBarrierButton 
+          <Card sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="h6"   sx={{ textAlign: 'center' }}>
+              Barrier xe Container
+            </Typography>
+            <OpenBarrierButton 
               vehicleType="TRUCK"
               onOpening={handleOpening} 
               onOpenCompleted={handleOpenCompleted} 
@@ -229,13 +233,35 @@ const CameraPopup = () => {
               sx={{ mt: 4 }}
             />
 
-          <CloseBarrierButton
-            vehicleType="TRUCK"
-            onClosing={handleClosing} 
-            onCloseCompleted={handleCloseCompleted} 
-            onCloseFailed={handleCloseFailed}
-            sx={{ mt: 4 }}
-          />
+            <CloseBarrierButton
+              vehicleType="TRUCK"
+              onClosing={handleClosing} 
+              onCloseCompleted={handleCloseCompleted} 
+              onCloseFailed={handleCloseFailed}
+              sx={{ mt: 4 }}
+            />
+          </Card>
+          <Card sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="h6"   sx={{ textAlign: 'center' }}>
+              Barrier xe máy
+            </Typography>
+            <OpenBarrierButton 
+              vehicleType="MOTO"
+              onOpening={handleOpening} 
+              onOpenCompleted={handleOpenCompleted} 
+              onOpenFailed={handleOpenFailed}
+              sx={{ mt: 4 }}
+            />
+
+            <CloseBarrierButton
+              vehicleType="MOTO"
+              onClosing={handleClosing} 
+              onCloseCompleted={handleCloseCompleted} 
+              onCloseFailed={handleCloseFailed}
+              sx={{ mt: 4 }}
+            />
+          </Card>
+        
 
           {waitingBarrier && (
             <CircularProgress color="inherit" sx={{ mt: 4 }} />
