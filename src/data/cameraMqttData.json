@@ -11,35 +11,35 @@
     "url": "103.116.8.51",
     "port": 9001,
     "topic": "cameraai/GPG",
-    "displayName": "Camera người vào"
+    "displayName": "Camera xe vào"
   },
   {
     "name": "Camera_2_1",
     "url": "103.116.8.51",
     "port": 9001,
     "topic": "cameraai/GPG",
-    "displayName": "Camera container vào"
+    "displayName": "Camera xe ra"
   },
   {
     "name": "Camera_2_2",
     "url": "103.116.8.51",
     "port": 9001,
     "topic": "cameraai/GPG",
-    "displayName": "Camera người ra"
+    "displayName": "Camera xe ra"
   },
   {
     "name": "Camera_2_3",
     "url": "103.116.8.51",
     "port": 9001,
     "topic": "cameraai/GPG",
-    "displayName": "Camera container ra"
+    "displayName": "Camera xe ra"
   },
   {
     "name": "Camera_1_3",
     "url": "103.116.8.51",
     "port": 9001,
     "topic": "cameraai/GPG",
-    "displayName": "Camera container ra"
+    "displayName": "Camera xe vào"
   },
   {
     "name": "Camera_1_4",
@@ -47,5 +47,19 @@
     "port": 9001,
     "topic": "cameraai/GPG",
     "displayName": "Camera tổng"
+  },
+  {
+    "name": "Camera_3_1",
+    "url": "103.116.8.51",
+    "port": 9001,
+    "topic": "cameraai/GPG",
+    "displayName": "Camera xe ra"
+  },
+  {
+    "name": "Camera_3_2",
+    "url": "103.116.8.51",
+    "port": 9001,
+    "topic": "cameraai/GPG",
+    "displayName": "Camera xe vào"
   }
 ]

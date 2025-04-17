@@ -5,8 +5,9 @@ import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
 import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
-import { Modal, Box, Typography, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
+import { Modal, Box, Typography, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Paper ,TextField, Stack,Button } from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
 
 function Truck() {
   const [transactionData, setTransactionData] = useState([]);
@@ -15,7 +16,8 @@ function Truck() {
   const [filterTransaction, setFilterTransactions] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAd, setSelectedAd] = useState(null); // Lưu thông tin dòng được chọn
-  const [openModal, setOpenModal] = useState(false); // State để điều khiển modal
+  const [openDetailModal, setOpenDetailModal] = useState(false); // State để điều khiển modal
+  const [openNoteModal, setOpenNoteModal] = useState(false); // State để điều khiển modal ghi chú
   const [selectedTab, setSelectedTab] = useState(0); // State to manage the selected tab
 
   const itemsPerPage = 10;
@@ -51,6 +53,13 @@ function Truck() {
     const filename = imagePath.split('/')[0];
     return `${baseUrl}/${filename}`; // Construct the new URL
   }
+
+  // Hàm mở modal ghi chú
+  const handleEditNot = (ad) => {
+    setSelectedAd(ad);
+    setOpenNoteModal(true);
+  };
+  
   // Hàm mở modal và hiển thị thông tin chi tiết
   const handleOpenModal = (ad) => {
     setSelectedAd(ad);
@@ -59,12 +68,12 @@ function Truck() {
     } else {
       setSelectedTab(1);
     }
-    setOpenModal(true);
+    setOpenDetailModal(true);
   };
 
   // Hàm đóng modal
   const handleCloseModal = () => {
-    setOpenModal(false);
+    setOpenDetailModal(false);
   };
 
   // Hàm tìm kiếm
@@ -114,7 +123,8 @@ function Truck() {
             exit_fullUrl: exit_fullUrl,
             entryTime: transaction.entryTime,
             exitTime: transaction.exitTime,
-            parkingTime: transaction.parkingTime
+            parkingTime: transaction.parkingTime,
+            note: "Test ghi chú"
           };
         });
       setTransactionData(formattedTransactions);
@@ -197,12 +207,13 @@ function Truck() {
             <table>
               <thead>
                 <tr>
-                  <th>Biển số xe</th>
-                  <th>Ảnh biển số</th>
-                  <th>Thời gian vào</th>
-                  <th>Thời gian ra</th>
-                  <th>Thời gian đỗ</th>
-                  <th>  </th>  
+                  <th style={{width : '10%'}}>Biển số xe</th>
+                  <th style={{width : '20%'}}>Ảnh biển số</th>
+                  <th style={{width : '12%'}}>Thời gian vào</th>
+                  <th style={{width : '12%'}}>Thời gian ra</th>
+                  <th style={{width : '10%'}}>Thời gian đỗ</th>
+                  <th style={{width : '21%'}}>Ghi chú</th>
+                  <th style={{width : '15%'}}>  </th>  
                 </tr>
               </thead>
               <tbody>
@@ -215,14 +226,24 @@ function Truck() {
                     <td>{ad.entryTime ? convertEpochMsToDateTime(ad.entryTime) : "    "}</td>
                     <td>{ad.exitTime ? convertEpochMsToDateTime(ad.exitTime) : "    "}</td>
                     <td>{ad.parkingTime ? convertMiliSecondsToDistanceTime(ad.parkingTime) : "    "}</td>
+                    <td>
+                      {ad.note ? ad.note : "  "}
+                    </td>
                     <td >
+                      <EditNoteIcon
+                        style={{ color: "gray" }}
+                        className="clickable"
+                        onClick={() => {
+                          handleEditNot(ad);
+                        }}
+                      />
                       <ReadMoreRoundedIcon
-                        style={{ margin: "20px"}}
+                        style={{ marginLeft : "20px"}}
                         className="read-more-icon clickable"
                         onClick={() => handleOpenModal(ad)} // Mở modal khi nhấp vào icon
                       />
                       <DeleteForeverRoundedIcon
-                        style={{ color: "red" }}
+                        style={{ color: "red", marginLeft : "20px" }}
                         className="clickable"
                         onClick={() => {
                           handleDeleteVehicle(ad.licensePlate)
@@ -240,7 +261,7 @@ function Truck() {
       {/* Modal hiển thị thông tin chi tiết */}
       <Modal
         id="detail-modal"
-        open={openModal}
+        open={openDetailModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
@@ -296,6 +317,66 @@ function Truck() {
                   <img src={selectedAd.exit_fullUrl} alt="Exit Full" className="full-image" />
                 </div>
               )}
+            </div>
+          )}
+        </Box>
+      </Modal>
+
+      <Modal
+        id="note-modal"
+        open={openNoteModal}
+        onClose={() => setOpenNoteModal(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          className="modal-box"
+          sx={{
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            gap: 3,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Ghi chú
+          </Typography>
+          {selectedAd && (
+            <div className="modal-content">
+              <TextField
+                multiline
+                fullWidth
+                minRows={10}
+                maxRows={20}
+                value={selectedAd.note}
+                onChange={(e) =>
+                  setSelectedAd({ ...selectedAd, note: e.target.value })
+                }
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    fontSize: "1rem",
+                    lineHeight: 1.5,
+                  },
+                }}
+              />
+
+              <Stack direction="row" justifyContent="flex-end" spacing={2} style={{ marginTop: "20px" }}>
+                <Button variant="outlined" onClick={()=> setOpenNoteModal(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    console.log("Ghi chú đã được cập nhật:", selectedAd.note);
+                    // Gửi yêu cầu cập nhật ghi chú
+                  }}
+                  disabled={!selectedAd.note.trim()}
+                >
+                  Lưu thay đổi
+                </Button>
+              </Stack>
             </div>
           )}
         </Box>
