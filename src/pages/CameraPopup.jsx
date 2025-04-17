@@ -15,10 +15,10 @@ import {
 import MQTT from "paho-mqtt";
 import axios from "axios";
 import cameraMqttData from "../data/cameraMqttData.json";
-import OpenBarrierButton from "../Components/OpenBarrierButton";
-import {OpenBarrier, CloseBarrier} from "../BarrierControllers/BarrierController";
+import {OpenTruckBarrier, CloseTruckBarrier} from "../BarrierControllers/BarrierController";
 import "./css/camera_popup.css";
 import CloseBarrierButton from "../Components/CloseBarrierButton";
+import OpenBarrierButton from "../Components/OpenBarrierButton";
 
 const CameraPopup = () => {
   const { camera_name } = useParams();
@@ -111,7 +111,7 @@ const CameraPopup = () => {
 
   useEffect(() => {
     if (autoOpenBarrier) {
-      OpenBarrier({
+      OpenTruckBarrier({
         onStartOpen: () => {
           setBarrierStatus("Đang bắt đầu mở barrier");
         },
@@ -222,18 +222,20 @@ const CameraPopup = () => {
           </Typography>
 
           <OpenBarrierButton 
+              vehicleType="TRUCK"
               onOpening={handleOpening} 
               onOpenCompleted={handleOpenCompleted} 
               onOpenFailed={handleOpenFailed}
               sx={{ mt: 4 }}
             />
 
-          <CloseBarrierButton>
+          <CloseBarrierButton
+            vehicleType="TRUCK"
             onClosing={handleClosing} 
             onCloseCompleted={handleCloseCompleted} 
             onCloseFailed={handleCloseFailed}
             sx={{ mt: 4 }}
-          </CloseBarrierButton>
+          />
 
           {waitingBarrier && (
             <CircularProgress color="inherit" sx={{ mt: 4 }} />

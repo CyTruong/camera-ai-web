@@ -1,34 +1,56 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress, Backdrop } from '@mui/material';
-import { CloseBarrier } from '../BarrierControllers/BarrierController';
+import { CloseMotoBarrier,CloseTruckBarrier } from '../BarrierControllers/BarrierController';
 
 
-const CloseBarrierButton = ({ onStartClose, onClosing, onCloseCompleted, onCloseFailed }) => {
+const CloseBarrierButton = ({ vehicleType, onStartClose, onClosing, onCloseCompleted, onCloseFailed }) => {
   const [loading, setLoading] = useState(false);
   const handleOpenBarrier = async () => {
     setLoading(true);
-    CloseBarrier({
-      onStartClose: () => {
-        if(onStartClose) onStartClose();
-        console.log("Barrier opening process started.");
-      },
-      onClosing: () => {
-        if(onClosing) onClosing();
-        console.log("Barrier is closing...");
-      },
-      onClosingCompleted: () => {
-        setLoading(false);
-        if(onCloseCompleted) onCloseCompleted();
-        console.log("Barrier has been successfully opened.");
-      },
-      onClosingError: (error) => {
-        setLoading(false);
-        if(onCloseFailed) onCloseFailed();
-        console.error("Error during barrier operation:", error);
-      },
-      isAutoClose: true,
-      waittingTime: 10, // Wait for 10 seconds before auto-closing
-    });
+    if (vehicleType === "TRUCK") {
+      CloseTruckBarrier({
+        onStartClose: () => {
+          if (onStartClose) onStartClose();
+          console.log("Barrier closing process started.");
+        },
+        onClosing: () => {
+          if (onClosing) onClosing();
+          console.log("Barrier is closing...");
+        },
+        onCloseCompleted: () => {
+          setLoading(false);
+          if (onCloseCompleted) onCloseCompleted();
+          console.log("Barrier has been successfully closed.");
+        },
+        onClosingError: (error) => {
+          setLoading(false);
+          if (onCloseFailed) onCloseFailed();
+          console.error("Error during barrier operation:", error);
+        },
+      });
+    }
+    if (vehicleType === "MOTO") {
+      CloseMotoBarrier({
+        onStartClose: () => {
+          if (onStartClose) onStartClose();
+          console.log("Barrier closing process started.");
+        },
+        onClosing: () => {
+          if (onClosing) onClosing();
+          console.log("Barrier is closing...");
+        },
+        onCloseCompleted: () => {
+          setLoading(false);
+          if (onCloseCompleted) onCloseCompleted();
+          console.log("Barrier has been successfully closed.");
+        },
+        onClosingError: (error) => {
+          setLoading(false);
+          if (onCloseFailed) onCloseFailed();
+          console.error("Error during barrier operation:", error);
+        },
+      });
+    }
   };
 
   return (

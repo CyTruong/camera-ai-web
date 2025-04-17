@@ -1,34 +1,60 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress, Backdrop } from '@mui/material';
-import { OpenBarrier } from '../BarrierControllers/BarrierController';
+import {OpenTruckBarrier, OpenMotoBarrier}from '../BarrierControllers/BarrierController';
 
 
-const OpenBarrierButton = ({ onStartOpen, onOpening, onOpenCompleted, onOpenFailed }) => {
+const OpenBarrierButton = ({vehicle_type, onStartOpen, onOpening, onOpenCompleted, onOpenFailed }) => {
   const [loading, setLoading] = useState(false);
   const handleOpenBarrier = async () => {
     setLoading(true);
-    OpenBarrier({
-      onStartOpen: () => {
-        if(onStartOpen) onStartOpen();
-        console.log("Barrier opening process started.");
-      },
-      onOpening: () => {
-        if(onOpening) onOpening();
-        console.log("Barrier is opening...");
-      },
-      onOpenCompleted: () => {
-        setLoading(false);
-        if(onOpenCompleted) onOpenCompleted();
-        console.log("Barrier has been successfully opened.");
-      },
-      onOpeningError: (error) => {
-        setLoading(false);
-        if(onOpenFailed) onOpenFailed();
-        console.error("Error during barrier operation:", error);
-      },
-      isAutoClose: true,
-      waittingTime: 10, // Wait for 10 seconds before auto-closing
-    });
+    if(vehicle_type === "MOTO") {
+      OpenMotoBarrier({
+        onStartOpen: () => {
+          if(onStartOpen) onStartOpen();
+          console.log("Barrier opening process started.");
+        },
+        onOpening: () => {
+          if(onOpening) onOpening();
+          console.log("Barrier is opening...");
+        },
+        onOpenCompleted: () => {
+          setLoading(false);
+          if(onOpenCompleted) onOpenCompleted();
+          console.log("Barrier has been successfully opened.");
+        },
+        onOpeningError: (error) => {
+          setLoading(false);
+          if(onOpenFailed) onOpenFailed();
+          console.error("Error during barrier operation:", error);
+        },
+        isAutoClose: true,
+        waittingTime: 10, // Wait for 10 seconds before auto-closing
+      });
+    }
+    if (vehicle_type === "TRUCK") {
+      OpenTruckBarrier({
+        onStartOpen: () => {
+          if(onStartOpen) onStartOpen();
+          console.log("Barrier opening process started.");
+        },
+        onOpening: () => {
+          if(onOpening) onOpening();
+          console.log("Barrier is opening...");
+        },
+        onOpenCompleted: () => {
+          setLoading(false);
+          if(onOpenCompleted) onOpenCompleted();
+          console.log("Barrier has been successfully opened.");
+        },
+        onOpeningError: (error) => {
+          setLoading(false);
+          if(onOpenFailed) onOpenFailed();
+          console.error("Error during barrier operation:", error);
+        },
+        isAutoClose: true,
+        waittingTime: 10, // Wait for 10 seconds before auto-closing
+      });
+    }
   };
 
   return (

@@ -94,7 +94,7 @@ function Motor() {
     .then(function(response) {
       const allTransaction = response.data.data;
       const formattedTransactions = allTransaction
-        .filter(transaction => transaction.licensePlate.length < 15)
+        .filter(transaction => transaction.licensePlate.length < 15 && transaction.vehicleType === "MOTOR")
         .map(transaction => {
           const exit_cropUrl = convertToUrl(transaction.licensePlateOutSmall);
           const exit_fullUrl = convertToUrl(transaction.licensePlateOutFull);

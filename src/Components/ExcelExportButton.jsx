@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 import * as XLSX from 'xlsx';
 
-const ExportButton = ({ filename, data }) => {
+const ExportButton = ({ filename, data, buttonTitle }) => {
   const handleExport = () => {
     // Transform the data
     const transformedData = data.map((item) => {
@@ -123,8 +123,9 @@ const ExportButton = ({ filename, data }) => {
   };
 
   return (
-    <Button variant="contained" color="primary" onClick={handleExport}>
-      Xuất Excel
+    <Button variant="contained" color="primary" onClick={handleExport} style={{ margin: '10px' }}>
+      {buttonTitle?buttonTitle:'Xuất Excel'}
+    ️
     </Button>
   );
 };

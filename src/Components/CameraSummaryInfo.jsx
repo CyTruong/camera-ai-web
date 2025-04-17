@@ -70,24 +70,25 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
       </Card>
 
       <Grid container spacing={4} sx={{ marginTop: '16px' }}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Card className="functions-pannel" sx={{ borderRadius: '15px', padding: '20px' }}>
             <Typography variant="h5" textAlign="center">Chức năng</Typography>
             <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
-              <ExcelExportButton data={transactions} filename={fileName} />
+              <ExcelExportButton data={transactions} filename={fileName} buttonTitle={"Xuất Excel xe tải"} />
+              <ExcelExportButton data={transactions} filename={fileName} buttonTitle={"Xuất Excel moto"} />
             </Grid>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card className="barrier-pannel" sx={{ borderRadius: '15px', padding: '20px' }}>
-            <Typography variant="h5" textAlign="center">Barrier</Typography>
+        <Grid item xs={12} md={4}>
+          <Card className="barrier-pannel" sx={{ borderRadius: '15px', padding: '10px' }}>
+            <Typography variant="h5" textAlign="center">Barrier Xe Tải</Typography>
             <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
-              <OpenBarrierButton />
+              <OpenBarrierButton vehicle_type="TRUCK" />
             </Grid>
             <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
-              <CloseBarrierButton />
+              <CloseBarrierButton vehicleType="TRUCK" />
             </Grid>
-            <Typography variant="h6" textAlign="center" sx={{ marginTop: '16px' }}>
+            {/* <Typography variant="h6" textAlign="center" sx={{ marginTop: '16px' }}>
               Tự động mở barrier: {autoOpen ? 'Bật' : 'Tắt'}
             </Typography>
             <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
@@ -104,8 +105,39 @@ const CameraSummaryInfo = ({ transactions, totalCars, carsInParking, carsEnterin
                   Mở
                 </ToggleButton>
               </ToggleButtonGroup>
-            </Grid>
+            </Grid> */}
           </Card>
+          
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card className="barrier-pannel" sx={{ borderRadius: '15px', padding: '10px' }}>
+            <Typography variant="h5" textAlign="center">Barrier Xe Máy</Typography>
+            <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
+              <OpenBarrierButton vehicle_type= "MOTO"/>
+            </Grid>
+            <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
+              <CloseBarrierButton vehicleType= "MOTO" />
+            </Grid>
+            {/* <Typography variant="h6" textAlign="center" sx={{ marginTop: '16px' }}>
+              Tự động mở barrier: {autoOpen ? 'Bật' : 'Tắt'}
+            </Typography>
+            <Grid container justifyContent="center" sx={{ marginTop: '16px' }}>
+              <ToggleButtonGroup
+                value={autoOpen}
+                exclusive
+                onChange={handleChange}
+                aria-label="auto open toggle"
+              >
+                <ToggleButton value={false} aria-label="off">
+                  Tắt
+                </ToggleButton>
+                <ToggleButton value={true} aria-label="on">
+                  Mở
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid> */}
+          </Card>
+          
         </Grid>
       </Grid>
     </div>

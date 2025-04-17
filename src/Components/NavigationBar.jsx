@@ -102,7 +102,7 @@ const NavigationBar = ({ isPin }) => {
                 </ListItemIcon>
                 <ListItemText primary="Xe công/ xe tải" />
               </ListItem>
-              {/* <ListItem 
+              <ListItem 
                 button 
                 component={Link} 
                 to="/moto" 
@@ -113,8 +113,8 @@ const NavigationBar = ({ isPin }) => {
                   <TwoWheelerIcon sx={{ color: '#fff' }} />
                 </ListItemIcon>
                 <ListItemText primary="Xe 2 bánh" />
-              </ListItem> */}
-              <ListItem 
+              </ListItem>
+              {/* <ListItem 
                 button 
                 component={Link} 
                 to="/nhan-vien" 
@@ -125,7 +125,7 @@ const NavigationBar = ({ isPin }) => {
                   <PersonIcon sx={{ color: '#fff' }} />
                 </ListItemIcon>
                 <ListItemText primary="Nhân viên" />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Collapse>
 
