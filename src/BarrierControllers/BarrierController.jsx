@@ -19,7 +19,7 @@ import axios from "axios";
  *   onOpeningError: (error) => console.error("Opening error:", error),
  * });
  */
-export default function OpenTruckBarrier({
+export function OpenTruckBarrier({
   onStartOpen,
   onOpening,
   onOpenCompleted,
@@ -72,7 +72,7 @@ export default function OpenTruckBarrier({
  *   onOpeningError: (error) => console.error("Opening error:", error),
  * });
  */
-export default function OpenMotoBarrier({
+export function OpenMotoBarrier({
   onStartOpen,
   onOpening,
   onOpenCompleted,

@@ -4,6 +4,8 @@ import "./css/truck_page.css";
 import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
 import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+
 import { Modal, Box, Typography, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
 
 function Truck() {
@@ -213,10 +215,18 @@ function Truck() {
                     <td>{ad.entryTime ? convertEpochMsToDateTime(ad.entryTime) : "    "}</td>
                     <td>{ad.exitTime ? convertEpochMsToDateTime(ad.exitTime) : "    "}</td>
                     <td>{ad.parkingTime ? convertMiliSecondsToDistanceTime(ad.parkingTime) : "    "}</td>
-                    <td>
+                    <td >
                       <ReadMoreRoundedIcon
-                        className="read-more-icon"
+                        style={{ margin: "20px"}}
+                        className="read-more-icon clickable"
                         onClick={() => handleOpenModal(ad)} // Mở modal khi nhấp vào icon
+                      />
+                      <DeleteForeverRoundedIcon
+                        style={{ color: "red" }}
+                        className="clickable"
+                        onClick={() => {
+                          handleDeleteVehicle(ad.licensePlate)
+                        }}
                       />
                     </td>
                   </tr>

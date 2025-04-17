@@ -4,6 +4,8 @@ import "./css/motor_page.css";
 import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
 import ReadMoreRoundedIcon from "@mui/icons-material/ReadMoreRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+
 import { Modal, Box, Typography, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material"; // Import Modal, Box, Typography, Tabs, Tab, and MUI table components
 
 function Motor() {
@@ -94,7 +96,7 @@ function Motor() {
     .then(function(response) {
       const allTransaction = response.data.data;
       const formattedTransactions = allTransaction
-        .filter(transaction => transaction.licensePlate.length < 15 && transaction.vehicleType === "MOTOR")
+        .filter(transaction => transaction.licensePlate.length < 15 && transaction.vehicleType === "MOTO")
         .map(transaction => {
           const exit_cropUrl = convertToUrl(transaction.licensePlateOutSmall);
           const exit_fullUrl = convertToUrl(transaction.licensePlateOutFull);
@@ -143,7 +145,7 @@ function Motor() {
     <div className="bodyWrap">
       <div className="contentOrderWrap">
         <div className="leftSide">
-          <h1>Xe tải</h1>
+          <h1>Xe 2 bánh</h1>
           <Pagination
             total={totalAds}
             itemsPerPage={itemsPerPage}
@@ -215,8 +217,16 @@ function Motor() {
                     <td>{ad.parkingTime ? convertMiliSecondsToDistanceTime(ad.parkingTime) : "    "}</td>
                     <td>
                       <ReadMoreRoundedIcon
-                        className="read-more-icon"
+                        style={{ margin: "20px"}}
+                        className="read-more-icon clickable"
                         onClick={() => handleOpenModal(ad)} // Mở modal khi nhấp vào icon
+                      />
+                      <DeleteForeverRoundedIcon
+                        style={{ color: "red" }}
+                        className="clickable"
+                        onClick={() => {
+                          handleDeleteVehicle(ad.licensePlate)
+                        }}
                       />
                     </td>
                   </tr>

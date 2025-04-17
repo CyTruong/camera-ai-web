@@ -61,7 +61,7 @@ const NavigationBar = ({ isPin }) => {
         },
       }}
     >
-      <div className="d-flex flex-column h-100">
+      <div className="d-flex flex-column h-100  "  >
         {/* Brand/Logo */}
         <Link
           to="/"

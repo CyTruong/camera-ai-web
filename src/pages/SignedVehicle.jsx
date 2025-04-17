@@ -2,42 +2,60 @@ import React, { useState, useEffect } from "react";
 import "./css/signed_vehicle.css";
 import SearchBar from "../Components/SearchBar";
 import Pagination from "../Components/Pagination";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import { Modal, Box, Typography } from "@mui/material";
+import axios from "axios";
 
 function SignedVehicle() {
   const [allVehicles, setAllVehicles] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [filterActive, setFilterActive] = useState(1);
+  const [buttonNewPopup, setButtonNewPopup] = useState(false);
   const [filterTransaction, setFilterTransactions] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [newVehicle, setNewVehicle] = useState({
-    vehicle_type: "",
-    license_plate: "",
-    last_come: "",
-    start_date: "",
-    end_date: null,
+  const [voucherDetails, setVoucherDetails] = useState({
+    username: "",
+    displayName: "",
+    userType: "KHACH_VANG_LAI",
+    vehiclePlates: [""],
+    carType: "TRUCK",
   });
 
   const itemsPerPage = 10;
 
-  // Load phương tiện từ API
+  // Load vehicles from API
   useEffect(() => {
-    fetch("http://171.244.16.229:8092/api/license-plate/")
-      .then((res) => res.json())
-      .then((data) => {
-        // Ẩn các xe đã hết hạn
-        const validVehicles = data.filter((v) => !v.end_date || new Date(v.end_date) > new Date());
+    const fetchVehicles = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://171.244.16.229:8092/api/license-plate/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const validVehicles = response.data.data.filter(
+          (v) => v.license_plate !== ""
+        );
         setAllVehicles(validVehicles);
-      })
-      .catch((err) => console.error("Lỗi lấy phương tiện:", err));
+      } catch (err) {
+        console.error("Error fetching vehicles:", err);
+      }
+    };
+
+    fetchVehicles();
   }, []);
 
-  // Lọc theo loại xe
+  // Filter by vehicle type
   useEffect(() => {
     let filtered = allVehicles;
     if (filterTransaction === "in") {
-      filtered = allVehicles.filter((t) => t.vehicle_type === "Xe hợp đồng");
+      filtered = allVehicles.filter((v) => v.carType === "TRUCK");
     } else if (filterTransaction === "out") {
-      filtered = allVehicles.filter((t) => t.vehicle_type === "Xe vãng lai");
+      filtered = allVehicles.filter((v) => v.carType === "MOTO");
     }
     setFilteredData(filtered);
     setCurrentPage(1);
@@ -49,43 +67,74 @@ function SignedVehicle() {
     currentPage * itemsPerPage
   );
 
-  // Thêm phương tiện mới
-  const handleAddVehicle = () => {
-    fetch("http://171.244.16.229:8092/api/vehicles", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newVehicle),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        alert("Đã thêm phương tiện!");
-        setAllVehicles((prev) => [...prev, data]);
-        setNewVehicle({
-          vehicle_type: "",
-          license_plate: "",
-          last_come: "",
-          start_date: "",
-          end_date: null,
-        });
-      })
-      .catch((err) => console.error("Lỗi thêm phương tiện:", err));
+  const handleDeleteVehicle = async (licensePlate) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `http://171.244.16.229:8092/api/license-plate/${licensePlate}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAllVehicles((prev) =>
+        prev.filter((v) => v.licensePlate !== licensePlate)
+      );
+    } catch (err) {
+      console.error("Error deleting vehicle:", err);
+    }
   };
 
-  // Cập nhật ngày kết thúc để “xoá mềm” phương tiện
-  const handleDeleteVehicle = (license_plate) => {
-    const endDate = new Date().toISOString().split("T")[0];
-    fetch(`http://171.244.16.229:8092/vehicles/${license_plate}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ end_date: endDate }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setAllVehicles((prev) =>
-          prev.filter((v) => v.license_plate !== license_plate)
-        );
-      })
-      .catch((err) => console.error("Lỗi xoá mềm phương tiện:", err));
+  const handleAddVehicle = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("Vehicle added:",voucherDetails );
+      const response = await axios.post(
+        "http://171.244.16.229:8093/api/users/createUserWithPlates",
+        voucherDetails,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAllVehicles([...allVehicles, response.data.data]);
+      setButtonNewPopup(false);
+      setVoucherDetails({
+        username: "",
+        displayName: "",
+        userType: "KHACH_VANG_LAI",
+        vehiclePlates: [""],
+        carType: "TRUCK",
+      });
+    } catch (err) {
+      console.error("Error adding vehicle:", err);
+    }
+  };
+
+  const handleAddLicensePlate = () => {
+    setVoucherDetails({
+      ...voucherDetails,
+      vehiclePlates: [...voucherDetails.vehiclePlates, ""],
+    });
+  };
+
+  const handleRemoveLicensePlate = (index) => {
+    const updatedPlates = voucherDetails.vehiclePlates.filter((_, i) => i !== index);
+    setVoucherDetails({
+      ...voucherDetails,
+      vehiclePlates: updatedPlates,
+    });
+  };
+
+  const handleLicensePlateChange = (index, value) => {
+    const updatedPlates = [...voucherDetails.vehiclePlates];
+    updatedPlates[index] = value;
+    setVoucherDetails({
+      ...voucherDetails,
+      vehiclePlates: updatedPlates,
+    });
   };
 
   return (
@@ -120,7 +169,7 @@ function SignedVehicle() {
                     setFilterActive(2);
                   }}
                 >
-                  Xe hợp đồng
+                  Xe tải/container
                 </li>
                 <li
                   className={`${filterActive === 3 ? "active" : ""}`}
@@ -129,17 +178,28 @@ function SignedVehicle() {
                     setFilterActive(3);
                   }}
                 >
-                  Xe vãng lai
+                  Xe moto
                 </li>
               </ul>
             </div>
             <div className="addOrderWrap">
               <SearchBar
                 data={allVehicles}
-                handleSearchChange={(newFilteredData) => setFilteredData(newFilteredData)}
-                dataType="Motor"
+                handleSearchChange={(newFilteredData) =>
+                  setFilteredData(newFilteredData)
+                }
+                dataType="vehicle"
                 status={filterTransaction}
               />
+              <button
+                className="addOrder"
+                onClick={() => {
+                  setButtonNewPopup(true);
+                }}
+              >
+                <AddCircleOutlineRoundedIcon />
+                <span className="addOrderText">Thêm</span>
+              </button>
             </div>
           </div>
 
@@ -150,24 +210,31 @@ function SignedVehicle() {
                   <th>STT</th>
                   <th>Loại xe</th>
                   <th>Biển số</th>
-                  <th>Lần vào gần nhất</th>
-                  <th>Hiệu lực từ</th>
+                  <th>Tên người dùng</th>
+                  <th>Tên phương tiện</th>
                   <th>Thao tác</th>
                 </tr>
               </thead>
               <tbody>
                 {computedTransaction.length > 0 ? (
                   computedTransaction.map((ad, index) => (
-                    <tr key={ad.license_plate}>
+                    <tr key={ad._id}>
                       <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                      <td>{ad.vehicle_type}</td>
-                      <td>{ad.license_plate}</td>
-                      <td>{ad.last_come}</td>
-                      <td>{ad.start_date}</td>
                       <td>
-                        <button onClick={() => handleDeleteVehicle(ad.license_plate)}>
-                          Xoá (Chọn ngày kết thúc)
-                        </button>
+                        {ad.carType === "TRUCK"
+                          ? "Xe tải/Container"
+                          : "Xe máy"}
+                      </td>
+                      <td>{ad.licensePlate}</td>
+                      <td>{ad.userName}</td>
+                      <td>{ad.vehicleName}</td>
+                      <td>
+                        <DeleteForeverRoundedIcon
+                          className="clickable"
+                          onClick={() => {
+                            handleDeleteVehicle(ad.licensePlate);
+                          }}
+                        />
                       </td>
                     </tr>
                   ))
@@ -181,43 +248,153 @@ function SignedVehicle() {
               </tbody>
             </table>
           </div>
-
-          <div className="addForm">
-            <h3>Thêm phương tiện mới</h3>
-            <input
-              type="text"
-              placeholder="Loại xe"
-              value={newVehicle.vehicle_type}
-              onChange={(e) =>
-                setNewVehicle({ ...newVehicle, vehicle_type: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Biển số xe"
-              value={newVehicle.license_plate}
-              onChange={(e) =>
-                setNewVehicle({ ...newVehicle, license_plate: e.target.value })
-              }
-            />
-            <input
-              type="datetime-local"
-              value={newVehicle.last_come}
-              onChange={(e) =>
-                setNewVehicle({ ...newVehicle, last_come: e.target.value })
-              }
-            />
-            <input
-              type="date"
-              value={newVehicle.start_date}
-              onChange={(e) =>
-                setNewVehicle({ ...newVehicle, start_date: e.target.value })
-              }
-            />
-            <button onClick={handleAddVehicle}>Thêm</button>
-          </div>
         </div>
       </div>
+
+      <Modal
+        id="add-new-modal"
+        open={buttonNewPopup}
+        onClose={() => setButtonNewPopup(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box className="modal-box">
+          <Typography id="modal-title" variant="h5" component="h2" style={{ color: '#ff0000', marginBottom: '1rem' }}>
+            Đăng ký mới phương tiện
+          </Typography>
+          <div className="popupWrap">
+            <div className="addNewOrderWrap">
+              <div className="addNewOrderForm">
+                <div className="orderDetails">
+                  <div className="input-group">
+                    <select
+                      className="orderDetailsSelect"
+                      placeholder="Loại phương tiện"
+                      value={voucherDetails.carType}
+                      onChange={(e) =>
+                        setVoucherDetails({
+                          ...voucherDetails,
+                          carType: e.target.value,
+                        })
+                      }
+                      required="required"
+                    >
+                      <option value="TRUCK">Xe tải / Xe Container</option>
+                      <option value="MOTO">Xe moto / Xe 2 bánh</option>
+                    </select>
+                  </div>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      placeholder="Tên phương tiện"
+                      className="orderDetailsInput"
+                      value={voucherDetails.displayName}
+                      onChange={(e) =>
+                        setVoucherDetails({
+                          ...voucherDetails,
+                          displayName: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      placeholder="Tên người dùng"
+                      className="orderDetailsInput"
+                      value={voucherDetails.username}
+                      onChange={(e) =>
+                        setVoucherDetails({
+                          ...voucherDetails,
+                          username: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="input-group">
+                    <select
+                      className="orderDetailsSelect"
+                      placeholder="Loại người dùng"
+                      value={voucherDetails.userType}
+                      onChange={(e) =>
+                        setVoucherDetails({
+                          ...voucherDetails,
+                          userType: e.target.value,
+                        })
+                      }
+                      required="required"
+                    >
+                      <option value="NHAN_VIEN">Nhân viên</option>
+                      <option value="KHACH_VANG_LAI">Khách vãng lai</option>
+                      <option value="DOI_TAC">Đối tác</option>
+                      <option value="CONG_TY_THANH_VIEN">Công ty thành viên</option>
+                      <option value="TONG_CONG_TY">Tổng công ty</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className="productDetails">
+                <div className="newOrderTable">
+                  <table style={{ width: "100%", padding: "0 1rem" }}>
+                    <thead>
+                      <tr>
+                        <th>STT</th>
+                        <th>Biển số xe</th>
+                        <th>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {voucherDetails.vehiclePlates.map((plate, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>
+                            <input
+                              style={{ textAlign: "center" }}
+                              type="text"
+                              value={plate}
+                              onChange={(e) =>
+                                handleLicensePlateChange(index, e.target.value)
+                              }
+                            />
+                          </td>
+                          <td>
+                            {voucherDetails.vehiclePlates.length > 1 && (
+                              <DeleteForeverRoundedIcon
+                                className="clickable"
+                                onClick={() => handleRemoveLicensePlate(index)}
+                              />
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="input-group">
+                  <span
+                    className="addNewLine clickable"
+                    onClick={handleAddLicensePlate}
+                  >
+                    + Thêm biển số xe
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="submitWrap">
+              <div className="submitNewVehicle">
+                <button
+                  className="submitNewOrderBtn"
+                  onClick={handleAddVehicle}
+                >
+                  <AddCircleOutlineRoundedIcon />
+                  <span className="addOrderText">Thêm</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 }
