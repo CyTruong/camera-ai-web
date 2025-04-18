@@ -12,10 +12,7 @@ import {
   FormControl,
   FormLabel
 } from "@mui/material";
-import MQTT from "paho-mqtt";
-import axios from "axios";
 import cameraMqttData from "../data/cameraMqttData.json";
-import {OpenTruckBarrier, CloseTruckBarrier} from "../BarrierControllers/BarrierController";
 import "./css/camera_popup.css";
 import CloseBarrierButton from "../Components/CloseBarrierButton";
 import OpenBarrierButton from "../Components/OpenBarrierButton";
@@ -50,6 +47,8 @@ const CameraPopup = () => {
       setImageUrl(convertToUrl(full_path));
       setLicensePlate(license_plate);
     }
+    console.log("initVal cameraname ", `${camera_name}_init_val`);
+    localStorage.removeItem(`${camera_name}_init_val`);
   }, [camera_name]);
 
   // Tìm dữ liệu MQTT tương ứng với camera_name
@@ -60,86 +59,21 @@ const CameraPopup = () => {
     }
   }, [camera_name]);
 
-  // Kết nối MQTT và lắng nghe tin nhắn
-  useEffect(() => {
-    if (mqttData) {
-      const client = new MQTT.Client(mqttData.url, Number(mqttData.port), mqttData.clientId || "");
-
-      client.connect({
-        onSuccess: () => {
-          console.log("Connected to MQTT broker");
-          client.subscribe([mqttData.topic], (err) => {
-            if (err) {
-              console.error("Subscription error:", err);
-            } else {
-              console.log("Subscribed to topics: " + mqttData.topic);
-            }
-          });
-        },
-        onFailure: (err) => {
-          console.error("Connection failed:", err);
-        },
-        userName: "gamercial",
-        password: "G@m3rc1al",
-      });
-
-      client.onMessageArrived = (message) => {
-        const payload = JSON.parse(message.payloadString);
-        setImageUrl(convertToUrl(payload.full_path));
-        setLicensePlate(payload.license_plate);
-        localStorage.setItem(`${camera_name}_init_val`, JSON.stringify(payload));
-      };
-
-      const handleBeforeUnload = (event) => {
-        localStorage.removeItem(`${camera_name}_init_val`);
-      };
-
-      const handleUnload = () => {
-        client.disconnect();
-        console.log("Disconnected from MQTT broker");
-      };
-
-      window.addEventListener('beforeunload', handleBeforeUnload);
-      window.addEventListener('unload', handleUnload);
-
-      return () => {
-        window.removeEventListener('beforeunload', handleBeforeUnload);
-        window.removeEventListener('unload', handleUnload);
-        client.disconnect();
-      };
-    }
-  }, [mqttData]);
 
   useEffect(() => {
-    // if (autoOpenBarrier) {
-    //   OpenTruckBarrier({
-    //     onStartOpen: () => {
-    //       setBarrierStatus("Đang bắt đầu mở barrier");
-    //     },
-    //     onOpening: () => {
-    //       setBarrierStatus("Đang mở barrier");
-    //       setWaitingBarrier(true);
-    //     },
-    //     onOpenCompleted: () => {
-    //       setBarrierStatus("Cổng đã mở");
-    //       setWaitingBarrier(false);
-    //     },
-    //     // onClosing: () => {
-    //     //   setBarrierStatus("Đang đóng barrier");
-    //     // },
-    //     // onClosingCompleted: () => {
-    //     //   setBarrierStatus("Barrier đã đóng");
-    //     // },
-    //     onOpeningError: (error) => {
-    //       setBarrierStatus("Mở barrier thất bại");
-    //       setWaitingBarrier(false);
-    //       console.error("Error during barrier operation:", error);
-    //     },
-    //     isAutoClose: true,
-    //     waittingTime: 10, // Wait for 10 seconds before auto-closing
-    //   });
-    // }
-  }, [autoOpenBarrier]);
+    // Make sure popup stays focused when opened
+    window.focus();
+    
+    // Optional: Prevent the popup from being closed accidentally
+    window.onbeforeunload = (e) => {
+      e.preventDefault();
+      return "Are you sure you want to close the camera view?";
+    };
+    
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -203,7 +137,7 @@ const CameraPopup = () => {
             component="img"
             image={imageUrl}
             alt={camera_name}
-            sx={{ width: '100%', height: 'auto', maxHeight: 500 }}
+            sx={{ width: '100%', height: 'auto', maxHeight: 800 , objectFit: 'contain'}}
           />
         </Card>
 

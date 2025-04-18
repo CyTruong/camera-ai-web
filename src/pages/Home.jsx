@@ -101,13 +101,18 @@ const Home = () => {
           if (!cameraData || cameraData.length === 0) {
             localStorage.setItem(`${cameraName}_init_val`, JSON.stringify(jsonData));
             console.log('Navigating to CameraPopup page...');
-            window.open(
+            const popup = window.open(
               `${window.location.origin}/camera-popup/${cameraName}`,
               '_blank',
-              'width=1152,height=545,top=100,left=100'
+              'width=1000,height=500,top=100,left=100,scrollbars=no,toolbar=no,location=no,status=no,resizable=yes,popup=yes,z-index=9999,alwaysRaised=yes,z-lock=yes'
             );
+            if (popup) {
+              popup.focus();
+            } else {
+              console.error("Popup blocked or failed to open.");
+            }
           }
-          setTimeout(() => {
+          setTimeout(() => {s
             loadTransactionData();
           }, 500);
         }
