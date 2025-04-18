@@ -179,9 +179,9 @@ export function CloseMotoBarrier({
       if (onClosing) onClosing();
       console.log("Sending request...");
       // Call the API to open the barrier
-	await axios.get(
-              "http://192.168.1.90:3001/close-moto-barrier"
-      );
+      await axios.get(
+                  "http://192.168.1.90:3001/close-bike-barrier"
+          );
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Notify that the barrier has been opened
