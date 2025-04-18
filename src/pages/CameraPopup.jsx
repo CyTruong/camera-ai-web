@@ -111,34 +111,34 @@ const CameraPopup = () => {
   }, [mqttData]);
 
   useEffect(() => {
-    if (autoOpenBarrier) {
-      OpenTruckBarrier({
-        onStartOpen: () => {
-          setBarrierStatus("Đang bắt đầu mở barrier");
-        },
-        onOpening: () => {
-          setBarrierStatus("Đang mở barrier");
-          setWaitingBarrier(true);
-        },
-        onOpenCompleted: () => {
-          setBarrierStatus("Cổng đã mở");
-          setWaitingBarrier(false);
-        },
-        // onClosing: () => {
-        //   setBarrierStatus("Đang đóng barrier");
-        // },
-        // onClosingCompleted: () => {
-        //   setBarrierStatus("Barrier đã đóng");
-        // },
-        onOpeningError: (error) => {
-          setBarrierStatus("Mở barrier thất bại");
-          setWaitingBarrier(false);
-          console.error("Error during barrier operation:", error);
-        },
-        isAutoClose: true,
-        waittingTime: 10, // Wait for 10 seconds before auto-closing
-      });
-    }
+    // if (autoOpenBarrier) {
+    //   OpenTruckBarrier({
+    //     onStartOpen: () => {
+    //       setBarrierStatus("Đang bắt đầu mở barrier");
+    //     },
+    //     onOpening: () => {
+    //       setBarrierStatus("Đang mở barrier");
+    //       setWaitingBarrier(true);
+    //     },
+    //     onOpenCompleted: () => {
+    //       setBarrierStatus("Cổng đã mở");
+    //       setWaitingBarrier(false);
+    //     },
+    //     // onClosing: () => {
+    //     //   setBarrierStatus("Đang đóng barrier");
+    //     // },
+    //     // onClosingCompleted: () => {
+    //     //   setBarrierStatus("Barrier đã đóng");
+    //     // },
+    //     onOpeningError: (error) => {
+    //       setBarrierStatus("Mở barrier thất bại");
+    //       setWaitingBarrier(false);
+    //       console.error("Error during barrier operation:", error);
+    //     },
+    //     isAutoClose: true,
+    //     waittingTime: 10, // Wait for 10 seconds before auto-closing
+    //   });
+    // }
   }, [autoOpenBarrier]);
 
   useEffect(() => {
